@@ -701,17 +701,26 @@ var KEEPER_SPOTS={
   hive_bless: {left:9,  top:83},
   hive_chill: {left:91, top:83}
 };
+// Render the REAL keeper using the live game's MOJI pose art (idle = stands with smoker).
+function keeperImg(pose){
+  var src=(typeof MOJI!=='undefined' && MOJI[pose]) ? MOJI[pose] : (typeof MOJI!=='undefined'?MOJI.idle:'');
+  return '<img src="'+src+'" alt="Beekeeper" style="height:78px;width:auto;display:block;filter:drop-shadow(0 3px 4px rgba(0,0,0,.18))">';
+}
 function placeKeeper(){
   var k=document.getElementById('keeper');
-  if(k && typeof keeperSVG==='function'){
-    k.innerHTML=keeperSVG({style:"boy",skin:"#F5C9A0",hair:"#4A2E14"},70);
+  if(k){
+    k.innerHTML=keeperImg('idle');
     var s=KEEPER_SPOTS.hive_buzz;
     k.style.left=s.left+'%'; k.style.top=s.top+'%';
   }
 }
 function moveKeeperTo(id){
   var k=document.getElementById('keeper'); var s=KEEPER_SPOTS[id];
-  if(k&&s){ k.style.left=s.left+'%'; k.style.top=s.top+'%'; }
+  if(k&&s){
+    // wave when he walks over to inspect a hive
+    k.innerHTML=keeperImg('wave');
+    k.style.left=s.left+'%'; k.style.top=s.top+'%';
+  }
 }
 
 function playMini(title,iconKey,desc){
