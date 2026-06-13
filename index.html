@@ -312,6 +312,7 @@ input[type=text]:focus{border-color:var(--honey);}
 .ftile{aspect-ratio:1;border:none;border-radius:12px;background:#fff;box-shadow:0 3px 0 rgba(0,0,0,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:2px;}
 .ftile:active{transform:translateY(2px);}
 #arena{position:relative;height:300px;border-radius:18px;background:linear-gradient(180deg,#FFFDF4,#FFF1D2);overflow:hidden;margin-top:8px;box-shadow:inset 0 3px 8px rgba(0,0,0,.12);}
+#arena.queen-frame{height:min(62vh,430px);min-height:340px;}
 .bug{position:absolute;cursor:pointer;animation:wig .4s infinite alternate;padding:10px;margin:-10px;-webkit-tap-highlight-color:transparent;}
 .bug.qtarget{z-index:5;}
 .bug.qtarget::after{content:"";position:absolute;left:50%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);border-radius:50%;}
@@ -2630,23 +2631,63 @@ function inspWin(h,msg){
 function inspFail(h,msg){h.mood=Math.max(20,h.mood-10);toast(msg);render();queueSave();}
 function playInspection(i){if(Math.random()<0.5)inspQueen(i);else inspMites(i);}
 function inspQueen(i){
- const h=S.hives[i];let t=12,done=false;
- arenaModal("Inspection: Spot the Queen!","The frame is crawling with bees — find Her Majesty! She's the one with the crown.");
+ const h=S.hives[i];let t=18,done=false;
+ arenaModal("Inspection: Find the Queen!","A packed honey frame is crawling with BeeMojis. Scan the crowd and tap Her Majesty as she moves through the workers.");
  const arena=document.getElementById("arena");
- const ws=drifters(arena,13,"a_beefly",30);
- const qIds=["q_love","q_cool","q_stache","q_coffee"];
- const qId=(h.queen&&QUEEN_LOOKS[h.queen])?h.queen:qIds[Math.floor(Math.random()*4)];
- const q=document.createElement("div");q.className="bug qtarget";q.style.animation="none";
- q.style.transition="left .8s ease-in-out,top .8s ease-in-out";q.innerHTML=artHTML(qId,34);
- q.style.left=(Math.random()*82)+"%";q.style.top=(Math.random()*82)+"%";arena.appendChild(q);
- const qmv=setInterval(()=>{q.style.left=(Math.random()*82)+"%";q.style.top=(Math.random()*82)+"%";},800);
- let tick;
- const end=(win)=>{if(done)return;done=true;clearInterval(ws.mv);clearInterval(qmv);clearInterval(tick);closeModal();
-  win?inspWin(h,"There she is! Inspection passed."):inspFail(h,"Couldn't find the queen... the hive is uneasy. Inspect again!");};
- ws.arr.forEach(b=>b.onclick=()=>{t=Math.max(1,t-2);blip(200,.08);});
- q.onclick=()=>{blip(900,.1);end(true);};
+ arena.classList.add("queen-frame");
+ arena.style.background="linear-gradient(90deg,rgba(42,26,6,.18) 0 8px,transparent 8px calc(100% - 8px),rgba(42,26,6,.18) calc(100% - 8px)),radial-gradient(circle at 20% 28%,rgba(255,255,255,.34),transparent 18%),linear-gradient(135deg,#F6C65B 0 25%,#F0B23A 25% 50%,#F6C65B 50% 75%,#E8A52D 75%)";
+ arena.style.backgroundSize="auto,auto,34px 34px";
+ arena.style.border="6px solid #7A4E1D";
+ arena.style.boxShadow="inset 0 0 0 5px rgba(255,239,194,.55), inset 0 0 32px rgba(90,48,8,.28)";
+ const railTop=document.createElement("div");railTop.style.cssText="position:absolute;left:0;right:0;top:11%;height:7px;background:rgba(122,78,29,.5);border-top:2px solid rgba(42,26,6,.45);border-bottom:2px solid rgba(255,255,255,.24);pointer-events:none";arena.appendChild(railTop);
+ const railMid=document.createElement("div");railMid.style.cssText="position:absolute;left:0;right:0;top:49%;height:7px;background:rgba(122,78,29,.42);border-top:2px solid rgba(42,26,6,.35);border-bottom:2px solid rgba(255,255,255,.2);pointer-events:none";arena.appendChild(railMid);
+ const railBot=document.createElement("div");railBot.style.cssText="position:absolute;left:0;right:0;top:82%;height:7px;background:rgba(122,78,29,.45);border-top:2px solid rgba(42,26,6,.35);border-bottom:2px solid rgba(255,255,255,.2);pointer-events:none";arena.appendChild(railBot);
+ const movers=[];
+ const laneY=[17,25,33,42,57,65,73,88];
+ const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+ const makeBee=(queen,idx)=>{
+  const d=document.createElement("div");d.className="bug"+(queen?" qtarget":"");d.style.animation="none";d.style.transition=`left ${queen?1.35:.95}s linear, top ${queen?1.35:.95}s ease-in-out, transform .28s ease`;
+  d.style.zIndex=queen?6:3+(idx%3);d.style.filter="drop-shadow(0 3px 2px rgba(0,0,0,.22))";
+  d.style.cursor="pointer";
+  if(queen){
+   const qIds=["q_love","q_cool","q_stache","q_coffee","q_money","q_angel"];
+   const qId=(h.queen&&QUEEN_LOOKS[h.queen])?h.queen:qIds[Math.floor(Math.random()*qIds.length)];
+   d.innerHTML=artHTML(qId,32);
+  }else{
+   const faces=["happy","big_smile","wink","cute","cool","sleepy","grimace"];
+   const accs=[null,null,null,"sunglasses","bandit_mask","cowboy_hat",null];
+   d.innerHTML=beeSprite({body:rollBeeBody(),face:faces[idx%faces.length],acc:accs[idx%accs.length]},26+(idx%4));
+  }
+  d.dataset.x=queen?12+Math.random()*12:5+Math.random()*86;
+  d.dataset.y=laneY[idx%laneY.length]+(Math.random()*5-2.5);
+  d.dataset.dir=(idx%2?1:-1);
+  d.dataset.lane=idx%laneY.length;
+  d.style.left=d.dataset.x+"%";d.style.top=d.dataset.y+"%";
+  arena.appendChild(d);movers.push(d);return d;
+ };
+ for(let k=0;k<34;k++){const b=makeBee(false,k);b.onclick=()=>{t=Math.max(3,t-1);blip(200,.06);b.style.transform="scale(.82) rotate(-8deg)";setTimeout(()=>b.style.transform="",160);};}
+ const q=makeBee(true,99);
+ q.onclick=(ev)=>{ev.stopPropagation();blip(900,.1);end(true);};
+ const moveBee=b=>{
+  const queen=b===q;
+  let x=parseFloat(b.dataset.x),y=parseFloat(b.dataset.y),dir=parseFloat(b.dataset.dir),lane=parseFloat(b.dataset.lane);
+  if(queen){
+   x+=dir*(5+Math.random()*8); if(x>90||x<8){dir*=-1;lane=clamp(lane+(Math.random()<.5?-1:1),0,laneY.length-1);}
+   y=laneY[lane]+Math.sin(Date.now()/420+x)*4+(Math.random()*3-1.5);
+  }else{
+   x+=dir*(3+Math.random()*7); if(x>93||x<4){dir*=-1;lane=(lane+(Math.random()<.5?1:laneY.length-1))%laneY.length;}
+   y=laneY[lane]+Math.sin(Date.now()/300+parseFloat(b.dataset.x))*3+(Math.random()*4-2);
+  }
+  b.dataset.x=clamp(x,4,93);b.dataset.y=clamp(y,10,90);b.dataset.dir=dir;b.dataset.lane=lane;
+  b.style.left=b.dataset.x+"%";b.style.top=b.dataset.y+"%";
+  b.style.transform=`translate(-50%,-50%) rotate(${dir>0?8:-8}deg)`;
+ };
+ let tick,mover=setInterval(()=>movers.forEach(moveBee),900);
+ const end=(win)=>{if(done)return;done=true;clearInterval(mover);clearInterval(tick);arena.classList.remove("queen-frame");closeModal();
+  win?inspWin(h,"There she is! Inspection passed."):inspFail(h,"The queen blended into the crowd... inspect again!");};
  tick=setInterval(()=>{t--;const e=document.getElementById("mgTime");if(e)e.textContent=t;if(t<=0)end(false);},1000);
  const e=document.getElementById("mgTime");if(e)e.textContent=t;
+ const sc=document.getElementById("mgScore");if(sc)sc.textContent="Find her";
 }
 function inspMites(i){
  const h=S.hives[i];let t=12,got=0,done=false;const NEED=6;
