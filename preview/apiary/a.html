@@ -222,16 +222,26 @@ body{
   box-shadow:0 3px 0 rgba(0,0,0,.3);white-space:nowrap;}
 /* currency row: one clean centered flex row */
 .hudrow{display:flex;gap:6px;justify-content:center;flex-wrap:nowrap;}
-/* goals strip: thin, labeled bars, side by side, fully contained */
-.goalstrip{display:flex;gap:8px;justify-content:center;width:100%;max-width:360px;}
-.goalbar{flex:1;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.82);
-  border:2.5px solid var(--ink);border-radius:20px;padding:3px 9px 3px 4px;
-  box-shadow:0 2px 0 rgba(0,0,0,.18);}
-.goalbar svg.gi{width:22px;height:22px;flex:none;}
-.goalbar .track{flex:1;height:9px;background:#E6D3A6;border-radius:6px;overflow:hidden;
-  border:1.5px solid rgba(0,0,0,.25);}
-.goalbar .fill{height:100%;border-radius:6px;}
-.goalbar .gv{font-size:9.5px;font-weight:800;color:var(--ink);white-space:nowrap;}
+/* goals as CIRCULAR PROGRESS RINGS with an icon in the center */
+.goalstrip{display:flex;gap:14px;justify-content:center;align-items:flex-start;}
+.ringgoal{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.ringwrap{position:relative;width:50px;height:50px;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.22));}
+.ringwrap svg.prog{width:50px;height:50px;transform:rotate(-90deg);}
+.ringwrap .rtrack{fill:none;stroke:rgba(255,255,255,.85);stroke-width:8;}
+.ringwrap .rfill{fill:none;stroke-width:8;stroke-linecap:round;
+  transition:stroke-dashoffset .6s ease;}
+.ringwrap .ricon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.ringwrap .ricon svg{width:24px;height:24px;}
+.ringgoal .gv{font-size:9.5px;font-weight:800;color:#2A1A06;white-space:nowrap;
+  background:rgba(255,255,255,.78);border-radius:8px;padding:0 5px;}
+/* canopy farm-stand MARKET button, pinned upper-right */
+.market-stand{position:absolute;top:8px;right:8px;z-index:35;pointer-events:auto;
+  background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.28));}
+.market-stand svg{width:62px;height:54px;display:block;}
+.market-stand span{font-size:10px;font-weight:800;color:#2A1A06;
+  background:rgba(255,255,255,.85);border:2px solid #2A1A06;border-radius:10px;padding:0 6px;}
 </style>
 </head><body>
 <!-- ===== inline non-character sprite sheet (sprites.svg) ===== -->
@@ -403,6 +413,23 @@ body{
 <symbol id="n_cards" viewBox="0 0 100 100"><rect x="20" y="24" width="44" height="60" rx="8" fill="#fff" stroke="#2A1A06" stroke-width="6" transform="rotate(-8 42 54)"/><rect x="38" y="20" width="44" height="60" rx="8" fill="#FFD23E" stroke="#2A1A06" stroke-width="6" transform="rotate(7 60 50)"/></symbol>
 <symbol id="n_shop" viewBox="0 0 100 100"><path d="M24 38 h52 l-6 46 h-40 z" fill="#FF8AC2" stroke="#2A1A06" stroke-width="6" stroke-linejoin="round"/><path d="M36 38 a14 14 0 0 1 28 0" fill="none" stroke="#2A1A06" stroke-width="6"/></symbol>
 <symbol id="n_market" viewBox="0 0 100 100"><path d="M18 78 L40 52 L56 64 L82 28" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M82 28 l-2 18 M82 28 l-18 2" stroke="#2A1A06" stroke-width="8" stroke-linecap="round"/></symbol>
+<!-- canopy farm-stand market stall: striped awning + counter + honey jars -->
+<symbol id="a_market_stand" viewBox="0 0 100 90">
+  <!-- posts -->
+  <rect x="14" y="30" width="6" height="56" rx="3" fill="#A8713A" stroke="#2A1A06" stroke-width="3"/>
+  <rect x="80" y="30" width="6" height="56" rx="3" fill="#A8713A" stroke="#2A1A06" stroke-width="3"/>
+  <!-- counter -->
+  <rect x="10" y="60" width="80" height="14" rx="4" fill="#C98A4B" stroke="#2A1A06" stroke-width="3.5"/>
+  <rect x="10" y="72" width="80" height="14" rx="4" fill="#A8713A" stroke="#2A1A06" stroke-width="3.5"/>
+  <!-- striped scalloped awning -->
+  <path d="M6 30 h88 v10 q-5 0 -5 6 q0 -6 -6 -6 q-6 0 -6 6 q0 -6 -6 -6 q-6 0 -6 6 q0 -6 -6 -6 q-6 0 -6 6 q0 -6 -6 -6 q-6 0 -6 6 q0 -6 -6 -6 q-6 0 -6 6 q0 -6 -5 -6 z" fill="#E94F4F" stroke="#2A1A06" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M21 30 v13 M37 30 v13 M53 30 v13 M69 30 v13" stroke="#FFF7E6" stroke-width="6" opacity=".9"/>
+  <path d="M6 30 h88" stroke="#2A1A06" stroke-width="3.5"/>
+  <!-- honey jars on the counter -->
+  <rect x="24" y="48" width="12" height="13" rx="3" fill="#FFC23C" stroke="#2A1A06" stroke-width="3"/>
+  <rect x="44" y="46" width="12" height="15" rx="3" fill="#FFB300" stroke="#2A1A06" stroke-width="3"/>
+  <rect x="64" y="48" width="12" height="13" rx="3" fill="#FFC23C" stroke="#2A1A06" stroke-width="3"/>
+</symbol>
 <symbol id="n_hub" viewBox="0 0 100 100"><path d="M20 38 h44 l-10 -12 M80 62 h-44 l10 12" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="n_note" viewBox="0 0 100 100"><path d="M38 78 V26 L76 16 V66" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="28" cy="78" rx="12" ry="9" fill="#2A1A06"/><ellipse cx="66" cy="68" rx="12" ry="9" fill="#2A1A06"/></symbol>
 <symbol id="n_book" viewBox="0 0 100 100"><path d="M50 26 C40 18 26 18 18 24 V78 c8-6 22-6 32 2 10-8 24-8 32-2 V24 c-8-6-22-6-32 2z" fill="#9FD8EA" stroke="#2A1A06" stroke-width="6" stroke-linejoin="round"/><path d="M50 28 v50" stroke="#2A1A06" stroke-width="5"/></symbol>
@@ -499,6 +526,10 @@ body{
 
 <!-- ===== CLEAN TOP BAR: logo -> name -> currency row -> goals strip ===== -->
 <div class="topbar">
+  <button class="market-stand" aria-label="Market" onclick="playMini('Market','jar','Trade honey &amp; cards at the farm stand!')">
+    <svg viewBox="0 0 100 90"><use href="#a_market_stand"/></svg>
+    <span>Market</span>
+  </button>
   <img class="logo-img" src="logo-title.png" alt="BeeMoji">
   <div class="namerow"><span data-bee="q_money" data-size="22"></span>Bubba's Bees &middot; Lv 5</div>
   <div class="hudrow">
@@ -508,14 +539,26 @@ body{
     <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg><b>1.7K</b></div>
   </div>
   <div class="goalstrip">
-    <div class="goalbar">
-      <svg class="gi" viewBox="0 0 100 100"><use href="#a_sab"/></svg>
-      <div class="track"><div class="fill" style="width:100%;background:var(--green)"></div></div>
+    <div class="ringgoal">
+      <div class="ringwrap">
+        <svg class="prog" viewBox="0 0 50 50">
+          <circle class="rtrack" cx="25" cy="25" r="21"/>
+          <circle class="rfill" cx="25" cy="25" r="21" stroke="var(--green)"
+            stroke-dasharray="131.9" stroke-dashoffset="0"/>
+        </svg>
+        <div class="ricon"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg></div>
+      </div>
       <span class="gv">8.4K/8.4K</span>
     </div>
-    <div class="goalbar">
-      <svg class="gi" viewBox="0 0 100 100"><use href="#a_jar"/></svg>
-      <div class="track"><div class="fill" style="width:96%;background:var(--honey)"></div></div>
+    <div class="ringgoal">
+      <div class="ringwrap">
+        <svg class="prog" viewBox="0 0 50 50">
+          <circle class="rtrack" cx="25" cy="25" r="21"/>
+          <circle class="rfill" cx="25" cy="25" r="21" stroke="var(--honey)"
+            stroke-dasharray="131.9" stroke-dashoffset="5.3"/>
+        </svg>
+        <div class="ricon"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></div>
+      </div>
       <span class="gv">2.2K/2.3K</span>
     </div>
   </div>
@@ -653,7 +696,6 @@ body{
   </div>
   <div class="navgap"></div>
   <div class="navside">
-    <button><svg viewBox="0 0 100 100"><use href="#n_market"/></svg>Market</button>
     <button><svg viewBox="0 0 100 100"><use href="#n_hub"/></svg>Hub</button>
     <button><svg viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button>
   </div>
