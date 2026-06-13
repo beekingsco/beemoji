@@ -55,7 +55,7 @@ body{
             radial-gradient(circle at 85% 80%,#3f9e3f 2px,transparent 3px);
   background-size:90px 90px,120px 120px,70px 70px,140px 140px;}
 .cloud{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(.3px);}
-.flora{position:absolute;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));}
+.flora{position:absolute;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));pointer-events:none;z-index:1;}
 /* logo - SCALED DOWN */
 .logo-wrap{position:absolute;top:6px;left:0;right:0;display:flex;justify-content:center;z-index:30;pointer-events:none;}
 .logo-wrap img{height:70px;width:auto;filter:drop-shadow(0 5px 8px rgba(0,0,0,.3));}
@@ -68,17 +68,21 @@ body{
 .pill b{font-size:15px;color:var(--ink);font-weight:800;}
 /* hives on board */
 .hive{position:absolute;cursor:pointer;transform:translate(-50%,-50%);
-  transition:transform .12s;z-index:10;text-align:center;}
+  transition:transform .12s;z-index:10;text-align:center;width:128px;}
 .hive:active{transform:translate(-50%,-50%) scale(.94);}
-.hive .hivesvg{width:92px;height:92px;display:block;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25));}
-.hive .qstand{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:12;
-  filter:drop-shadow(0 4px 3px rgba(0,0,0,.3));}
-.hive .nametag{display:inline-block;margin-top:-2px;background:var(--ink);color:#fff;
+.hive .hivewrap{position:relative;display:inline-block;width:104px;height:104px;}
+.hive .hivesvg{width:104px;height:104px;display:block;filter:drop-shadow(0 8px 6px rgba(0,0,0,.28));}
+.hive .qstand{position:absolute;bottom:-6px;right:-14px;z-index:12;
+  filter:drop-shadow(0 4px 3px rgba(0,0,0,.32));}
+.hive .badge{position:absolute;top:-4px;left:-6px;width:30px;height:30px;z-index:13;
+  background:#fff;border:3px solid var(--ink);border-radius:50%;padding:3px;
+  box-shadow:0 2px 0 rgba(0,0,0,.22);}
+.hive .nametag{display:inline-block;margin-top:4px;background:var(--ink);color:#fff;
   font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;white-space:nowrap;
   box-shadow:0 2px 0 rgba(0,0,0,.3);}
-.hive .lvl{position:absolute;top:-4px;left:0;background:var(--honey);color:var(--ink);
+.hive .lvl{position:absolute;top:-6px;right:-6px;background:var(--honey);color:var(--ink);
   border:2.5px solid var(--ink);border-radius:30px;font-size:11px;font-weight:800;
-  padding:0 7px;box-shadow:0 2px 0 rgba(0,0,0,.25);z-index:13;}
+  padding:0 7px;box-shadow:0 2px 0 rgba(0,0,0,.25);z-index:14;}
 /* floating mini-games */
 .mini{position:absolute;cursor:pointer;transform:translate(-50%,-50%);z-index:15;
   animation:bob 2.6s ease-in-out infinite;text-align:center;}
@@ -187,13 +191,13 @@ body{
 .honeytoast svg{width:28px;height:28px;}
 .honeytoast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 /* progress pip rings */
-.pip{width:58px;height:58px;position:relative;}
+.pip{width:50px;height:50px;position:relative;}
 .pip svg.ring{position:absolute;inset:0;transform:rotate(-90deg);}
 .pip .ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-.pip .ico svg{width:30px;height:30px;}
-.pip .frac{position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);
+.pip .ico svg{width:26px;height:26px;}
+.pip .frac{position:absolute;left:56px;top:50%;transform:translateY(-50%);
   font-size:9.5px;font-weight:800;color:var(--ink);background:var(--cream);
-  border:2px solid var(--ink);border-radius:20px;padding:0 5px;white-space:nowrap;}
+  border:2px solid var(--ink);border-radius:20px;padding:1px 6px;white-space:nowrap;}
 </style>
 </head><body>
 <!-- ===== inline non-character sprite sheet (sprites.svg) ===== -->
@@ -383,59 +387,63 @@ body{
   <svg class="flora" style="left:6%;bottom:7%;width:44px;height:44px;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
   <svg class="flora" style="left:78%;bottom:5%;width:40px;height:40px;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
   <svg class="flora" style="left:30%;bottom:3%;width:38px;height:38px;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
-  <svg class="flora" style="left:60%;bottom:9%;width:42px;height:42px;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
-  <svg class="flora" style="left:46%;bottom:1%;width:36px;height:36px;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
+  <svg class="flora" style="left:88%;bottom:9%;width:42px;height:42px;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
+  <svg class="flora" style="left:14%;bottom:1%;width:36px;height:36px;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
 
-  <!-- HIVES: hb_ skin sprite + Queen (beeSprite) standing in front -->
-  <div class="hive" style="left:26%;top:46%;" onclick="openHive('hive_buzz')">
-    <span class="lvl">Lv 5</span>
-    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_buzz"/></svg>
-    <span class="qstand" data-bee="q_coffee" data-size="50"></span>
-    <br><span class="nametag">Buzzed Hive</span>
+  <!-- HIVES: real #a_hive structure + small theme badge accent + Queen standing beside -->
+  <div class="hive" style="left:27%;top:40%;" onclick="openHive('hive_buzz')">
+    <div class="hivewrap">
+      <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+      <svg class="badge" viewBox="0 0 100 100"><use href="#hb_buzz"/></svg>
+      <span class="qstand" data-bee="q_coffee" data-size="48"></span>
+      <span class="lvl">Lv 5</span>
+    </div>
+    <div><span class="nametag">Buzzed Hive</span></div>
   </div>
-  <div class="hive" style="left:74%;top:43%;" onclick="openHive('hive_fort')">
-    <span class="lvl">Lv 4</span>
-    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_fort"/></svg>
-    <span class="qstand" data-bee="q_money" data-size="50"></span>
-    <br><span class="nametag">Fort Honey</span>
+  <div class="hive" style="left:73%;top:38%;" onclick="openHive('hive_fort')">
+    <div class="hivewrap">
+      <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+      <svg class="badge" viewBox="0 0 100 100"><use href="#hb_fort"/></svg>
+      <span class="qstand" data-bee="q_money" data-size="48"></span>
+      <span class="lvl">Lv 4</span>
+    </div>
+    <div><span class="nametag">Fort Honey</span></div>
   </div>
-  <div class="hive" style="left:38%;top:71%;" onclick="openHive('hive_bless')">
-    <span class="lvl">Lv 3</span>
-    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_bless"/></svg>
-    <span class="qstand" data-bee="q_angel" data-size="50"></span>
-    <br><span class="nametag">Blessed Hive</span>
+  <div class="hive" style="left:27%;top:67%;" onclick="openHive('hive_bless')">
+    <div class="hivewrap">
+      <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+      <svg class="badge" viewBox="0 0 100 100"><use href="#hb_bless"/></svg>
+      <span class="qstand" data-bee="q_angel" data-size="48"></span>
+      <span class="lvl">Lv 3</span>
+    </div>
+    <div><span class="nametag">Blessed Hive</span></div>
   </div>
-  <div class="hive" style="left:79%;top:71%;" onclick="openHive('hive_chill')">
-    <span class="lvl">Lv 2</span>
-    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_chill"/></svg>
-    <span class="qstand" data-bee="q_cool" data-size="50"></span>
-    <br><span class="nametag">Chill Hive</span>
+  <div class="hive" style="left:73%;top:65%;" onclick="openHive('hive_chill')">
+    <div class="hivewrap">
+      <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+      <svg class="badge" viewBox="0 0 100 100"><use href="#hb_chill"/></svg>
+      <span class="qstand" data-bee="q_cool" data-size="48"></span>
+      <span class="lvl">Lv 2</span>
+    </div>
+    <div><span class="nametag">Chill Hive</span></div>
   </div>
 
-  <!-- floating mini-games -->
-  <div class="mini danger" style="left:11%;top:56%;" onclick="playMini('Robber Bees','grumble','A swarm is raiding! Tap-defend your honey.')">
+  <!-- floating mini-games: separate items in empty meadow gaps, no overlap with hives/HUD -->
+  <div class="mini danger" style="left:50%;top:51%;" onclick="playMini('Robber Bees','grumble','A swarm is raiding! Tap-defend your honey.')">
     <div class="orb"><span class="ring"></span><span data-bee="grumble" data-size="42"></span></div>
     <div class="timer" data-secs="272">4:32</div>
   </div>
-  <div class="mini" style="left:90%;top:52%;" onclick="playMini('Honey Drop','jar','Catch falling jars before they spill.')">
-    <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></div>
-    <div class="timer" data-secs="135">2:15</div>
-  </div>
-  <div class="mini cool" style="left:12%;top:78%;" onclick="playMini('Waggle Dance','q_disco','Match the dance to boost your rate.')">
+  <div class="mini cool" style="left:11%;top:54%;" onclick="playMini('Waggle Dance','q_disco','Match the dance to boost your rate.')">
     <div class="orb"><span class="ring"></span><span data-bee="q_disco" data-size="42"></span></div>
     <div class="timer" data-secs="408">6:48</div>
-  </div>
-  <div class="mini danger" style="left:62%;top:80%;" onclick="playMini('Hornet Watch','hornet','Swat hornets before they reach the hive.')">
-    <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_hornet"/></svg></div>
-    <div class="timer" data-secs="67">1:07</div>
   </div>
 </div>
 
 <!-- logo (scaled down) -->
 <div class="logo-wrap"><img src="logo-title.png" alt="BeeMoji"></div>
 
-<!-- top-corner goal pips -->
-<div style="position:absolute;top:84px;left:12px;z-index:28;display:flex;gap:6px;">
+<!-- goal pips: small, stacked vertically in the top-left corner, clear of HUD & hives -->
+<div style="position:absolute;top:84px;left:14px;z-index:28;display:flex;flex-direction:column;gap:14px;">
   <div class="pip">
     <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
     <circle cx="29" cy="29" r="24" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
@@ -457,8 +465,8 @@ body{
    <span data-bee="q_money" data-size="22"></span>
    Bubba's Bees &middot; Lv 5</div>
 
-<!-- currency HUD -->
-<div class="hud" style="top:128px;left:50%;transform:translateX(-50%);">
+<!-- currency HUD: centered row -->
+<div class="hud" style="top:124px;left:50%;transform:translateX(-50%);">
   <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_coin"/></svg><b>960</b></div>
   <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><b>200</b></div>
   <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jelly"/></svg><b>3</b></div>
