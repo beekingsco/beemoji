@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>BeeMoji Apiary - Minimal Float</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3331754734472606" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -33,6 +34,11 @@ body{
   background:linear-gradient(#9BE2FF,#FFEFC2);
 }
 .hidden-sprites{position:absolute;width:0;height:0;overflow:hidden;}
+/* layered bee sprite css (from beespr.css) */
+.beespr{position:relative;display:inline-block;vertical-align:middle;}
+.beespr .bb-body{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:92%;width:auto;z-index:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));}
+.beespr .bb-face{position:absolute;left:50%;top:21%;transform:translateX(-50%);width:56%;height:auto;z-index:2;}
+.beespr .bb-acc{position:absolute;left:50%;transform:translateX(-50%);height:auto;z-index:3;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));}
 /* board / landscape */
 .board{position:absolute;inset:0;overflow:hidden;}
 .sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky1) 0%,#C8F0FF 32%,var(--sky2) 60%);}
@@ -49,12 +55,10 @@ body{
             radial-gradient(circle at 85% 80%,#3f9e3f 2px,transparent 3px);
   background-size:90px 90px,120px 120px,70px 70px,140px 140px;}
 .cloud{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(.3px);}
-.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%;}
-/* decorative flora on ground */
 .flora{position:absolute;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));}
-/* logo */
-.logo-wrap{position:absolute;top:2px;left:0;right:0;display:flex;justify-content:center;z-index:30;pointer-events:none;}
-.logo-wrap img{width:150px;height:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));}
+/* logo - SCALED DOWN */
+.logo-wrap{position:absolute;top:6px;left:0;right:0;display:flex;justify-content:center;z-index:30;pointer-events:none;}
+.logo-wrap img{height:70px;width:auto;filter:drop-shadow(0 5px 8px rgba(0,0,0,.3));}
 /* HUD currency pills */
 .hud{position:absolute;display:flex;gap:7px;z-index:25;}
 .pill{display:flex;align-items:center;gap:4px;background:var(--cream);
@@ -67,18 +71,14 @@ body{
   transition:transform .12s;z-index:10;text-align:center;}
 .hive:active{transform:translate(-50%,-50%) scale(.94);}
 .hive .hivesvg{width:92px;height:92px;display:block;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25));}
-.hive .badge{position:absolute;top:-6px;right:2px;width:34px;height:34px;
-  background:#fff;border:3px solid var(--ink);border-radius:50%;padding:2px;
-  box-shadow:0 2px 0 rgba(0,0,0,.2);}
-.hive .qbubble{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
-  width:40px;height:40px;background:#fff;border:3px solid var(--ink);border-radius:50%;
-  padding:2px;box-shadow:0 2px 0 rgba(0,0,0,.2);}
-.hive .nametag{display:inline-block;margin-top:-4px;background:var(--ink);color:#fff;
+.hive .qstand{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:12;
+  filter:drop-shadow(0 4px 3px rgba(0,0,0,.3));}
+.hive .nametag{display:inline-block;margin-top:-2px;background:var(--ink);color:#fff;
   font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;white-space:nowrap;
   box-shadow:0 2px 0 rgba(0,0,0,.3);}
 .hive .lvl{position:absolute;top:-4px;left:0;background:var(--honey);color:var(--ink);
   border:2.5px solid var(--ink);border-radius:30px;font-size:11px;font-weight:800;
-  padding:0 7px;box-shadow:0 2px 0 rgba(0,0,0,.25);}
+  padding:0 7px;box-shadow:0 2px 0 rgba(0,0,0,.25);z-index:13;}
 /* floating mini-games */
 .mini{position:absolute;cursor:pointer;transform:translate(-50%,-50%);z-index:15;
   animation:bob 2.6s ease-in-out infinite;text-align:center;}
@@ -86,6 +86,7 @@ body{
   border:3.5px solid var(--ink);display:flex;align-items:center;justify-content:center;
   box-shadow:0 6px 0 rgba(0,0,0,.22);position:relative;}
 .mini .orb svg{width:42px;height:42px;}
+.mini .orb .beespr{position:relative;z-index:2;}
 .mini.danger .orb{background:radial-gradient(circle at 35% 30%,#ffd0d0,var(--red));}
 .mini.cool .orb{background:radial-gradient(circle at 35% 30%,#d6f0ff,var(--blue));}
 .mini .timer{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);
@@ -107,11 +108,13 @@ body{
 .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #287528;}
 .btn.honey:active{box-shadow:0 1px 0 #9c5e00;}
 .btn.blue:active{box-shadow:0 1px 0 #1e6e9c;}
-/* bottom nav */
-.nav{position:absolute;left:0;right:0;bottom:0;height:74px;z-index:40;
+/* bottom nav with center notch */
+.nav{position:absolute;left:0;right:0;bottom:0;height:78px;z-index:40;
   background:linear-gradient(var(--cream),#FFEFD0);border-top:3px solid #E9CF95;
-  display:flex;align-items:center;justify-content:space-around;padding:4px 6px 8px;
+  display:flex;align-items:center;padding:4px 6px 10px;
   box-shadow:0 -4px 14px rgba(0,0,0,.12);}
+.nav .navside{flex:1;display:flex;align-items:center;justify-content:space-around;}
+.nav .navgap{width:96px;flex:none;}
 .nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
   align-items:center;gap:1px;font-family:inherit;color:#9a8055;font-weight:700;font-size:10px;
   flex:1;position:relative;padding-top:6px;}
@@ -119,6 +122,21 @@ body{
 .nav button.active{color:var(--ink);}
 .nav button.active svg{opacity:1;}
 .nav button.active::after{content:"";position:absolute;top:0;width:26px;height:4px;border-radius:4px;background:var(--honey);}
+/* HARVEST FUSED CENTER BUTTON (Monopoly GO style) */
+.harvest{position:absolute;left:50%;bottom:42px;transform:translateX(-50%);z-index:46;
+  width:84px;height:84px;border-radius:50%;border:5px solid var(--ink);cursor:pointer;
+  background:radial-gradient(circle at 38% 30%,#FFE9A8 0%,var(--gold) 42%,var(--honey-d) 100%);
+  display:flex;align-items:center;justify-content:center;padding:0;
+  box-shadow:0 6px 0 #9c5e00, 0 10px 18px rgba(0,0,0,.35);
+  transition:transform .1s, box-shadow .1s;}
+.harvest .jar{width:50px;height:50px;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3));}
+.harvest::after{content:"";position:absolute;inset:-9px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 0 0 rgba(255,210,62,0);}
+.harvest.ready{animation:harvpulse 1.5s ease-in-out infinite;}
+.harvest.ready::after{animation:harvhalo 1.5s ease-in-out infinite;}
+.harvest:active{transform:translateX(-50%) translateY(3px);box-shadow:0 3px 0 #9c5e00,0 6px 12px rgba(0,0,0,.3);}
+@keyframes harvpulse{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.06);}}
+@keyframes harvhalo{0%{box-shadow:0 0 0 0 rgba(255,210,62,.85);}70%{box-shadow:0 0 0 22px rgba(255,210,62,0);}100%{box-shadow:0 0 0 0 rgba(255,210,62,0);}}
 /* popover overlay */
 .scrim{position:absolute;inset:0;background:rgba(20,12,4,.45);z-index:50;display:none;
   align-items:flex-end;justify-content:center;backdrop-filter:blur(1px);}
@@ -126,7 +144,7 @@ body{
 .popcard{width:100%;background:linear-gradient(180deg,#FFF8EA,#FFEFCF);border-top-left-radius:28px;
   border-top-right-radius:28px;border:4px solid var(--ink);border-bottom:none;
   padding:16px 18px 92px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.9,.3,1.2);
-  max-height:74%;overflow:auto;}
+  max-height:74%;overflow:auto;position:relative;}
 .scrim.show .popcard{transform:translateY(0);}
 .popcard h2{font-size:21px;color:var(--ink);display:flex;align-items:center;gap:8px;}
 .popcard .x{position:absolute;top:10px;right:14px;width:38px;height:38px;border-radius:50%;
@@ -136,6 +154,7 @@ body{
 .stat{background:#fff;border:2.5px solid var(--ink);border-radius:14px;padding:5px 10px;
   font-weight:800;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:5px;}
 .stat svg{width:20px;height:20px;}
+.stat .beespr{margin-right:2px;}
 .barwrap{margin:10px 0;}
 .barwrap .lab{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--ink);margin-bottom:3px;}
 .bar{height:16px;border-radius:12px;background:#E6D3A6;border:2.5px solid var(--ink);overflow:hidden;}
@@ -159,7 +178,15 @@ body{
 .toast p{font-size:13px;color:#6a583a;font-weight:700;margin-bottom:12px;}
 .toast .row{display:flex;gap:8px;}
 .toast .btn{flex:1;font-size:15px;padding:11px;}
-/* progress pip rings (variant A) */
+/* small honey toast (harvest) */
+.honeytoast{position:absolute;left:50%;bottom:140px;transform:translateX(-50%) translateY(10px);
+  z-index:55;background:var(--ink);color:var(--gold);border:3px solid var(--gold);
+  border-radius:24px;padding:8px 16px 8px 10px;font-weight:800;font-size:15px;
+  display:flex;align-items:center;gap:7px;opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;box-shadow:0 8px 20px rgba(0,0,0,.4);white-space:nowrap;}
+.honeytoast svg{width:28px;height:28px;}
+.honeytoast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* progress pip rings */
 .pip{width:58px;height:58px;position:relative;}
 .pip svg.ring{position:absolute;inset:0;transform:rotate(-90deg);}
 .pip .ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
@@ -169,7 +196,9 @@ body{
   border:2px solid var(--ink);border-radius:20px;padding:0 5px;white-space:nowrap;}
 </style>
 </head><body>
-<div class="hidden-sprites"><svg width="0" height="0" style="position:absolute">
+<!-- ===== inline non-character sprite sheet (sprites.svg) ===== -->
+<div class="hidden-sprites">
+<svg width="0" height="0" style="position:absolute">
 <defs>
 <!-- base bee -->
 <g id="beebase">
@@ -340,206 +369,307 @@ body{
 <symbol id="n_note" viewBox="0 0 100 100"><path d="M38 78 V26 L76 16 V66" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="28" cy="78" rx="12" ry="9" fill="#2A1A06"/><ellipse cx="66" cy="68" rx="12" ry="9" fill="#2A1A06"/></symbol>
 <symbol id="n_book" viewBox="0 0 100 100"><path d="M50 26 C40 18 26 18 18 24 V78 c8-6 22-6 32 2 10-8 24-8 32-2 V24 c-8-6-22-6-32 2z" fill="#9FD8EA" stroke="#2A1A06" stroke-width="6" stroke-linejoin="round"/><path d="M50 28 v50" stroke="#2A1A06" stroke-width="5"/></symbol>
 </defs>
-</svg></div>
+</svg>
+</div>
 <div id="phone">
 
 <div class="board">
-  <div class="sky"></div><div class="cloud" style="top:9%;left:14%;width:70px;height:24px;"></div>
-    <div class="cloud" style="top:16%;left:64%;width:90px;height:28px;"></div>
-    <div class="cloud" style="top:26%;left:34%;width:60px;height:20px;opacity:.7;"></div>
+  <div class="sky"></div>
+  <div class="cloud" style="top:9%;left:14%;width:70px;height:24px;"></div>
+  <div class="cloud" style="top:16%;left:64%;width:90px;height:28px;"></div>
+  <div class="cloud" style="top:26%;left:34%;width:60px;height:20px;opacity:.7;"></div>
   <div class="hills"></div>
   <div class="ground"></div>
   <svg class="flora" style="left:6%;bottom:7%;width:44px;height:44px;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
-    <svg class="flora" style="left:78%;bottom:5%;width:40px;height:40px;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
-    <svg class="flora" style="left:30%;bottom:3%;width:38px;height:38px;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
-    <svg class="flora" style="left:60%;bottom:9%;width:42px;height:42px;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
-    <svg class="flora" style="left:46%;bottom:1%;width:36px;height:36px;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
-  <div class="hive" style="left:26%;top:48%;" onclick="openHive('hive_club')">
-          <span class="lvl">Lv 5</span>
-          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
-          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_club"/></svg>
-          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_money"/></svg>
-          <br><span class="nametag">Gentlebee Club</span>
-        </div><div class="hive" style="left:74%;top:44%;" onclick="openHive('hive_star')">
-          <span class="lvl">Lv 4</span>
-          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
-          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_star"/></svg>
-          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_star"/></svg>
-          <br><span class="nametag">Star Skep</span>
-        </div><div class="hive" style="left:40%;top:72%;" onclick="openHive('hive_love')">
-          <span class="lvl">Lv 3</span>
-          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
-          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_love"/></svg>
-          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_love"/></svg>
-          <br><span class="nametag">Lovebug Lodge</span>
-        </div><div class="hive" style="left:78%;top:72%;" onclick="openHive('hive_chill')">
-          <span class="lvl">Lv 2</span>
-          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
-          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_chill"/></svg>
-          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_cool"/></svg>
-          <br><span class="nametag">Chillhive</span>
-        </div>
-  <div class="mini danger" style="left:11%;top:56%;" onclick="playMini('Robber Bees','a_s_grumble','A swarm is raiding! Tap-defend your honey.')">
-          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_s_grumble"/></svg></div>
-          <div class="timer" data-secs="272">4:32</div>
-        </div><div class="mini" style="left:90%;top:52%;" onclick="playMini('Honey Drop','a_jar','Catch falling jars before they spill.')">
-          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></div>
-          <div class="timer" data-secs="135">2:15</div>
-        </div><div class="mini cool" style="left:12%;top:78%;" onclick="playMini('Waggle Dance','a_q_disco','Match the dance to boost your rate.')">
-          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_q_disco"/></svg></div>
-          <div class="timer" data-secs="408">6:48</div>
-        </div><div class="mini danger" style="left:62%;top:80%;" onclick="playMini('Hornet Watch','a_hornet','Swat hornets before they reach the hive.')">
-          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_hornet"/></svg></div>
-          <div class="timer" data-secs="67">1:07</div>
-        </div>
+  <svg class="flora" style="left:78%;bottom:5%;width:40px;height:40px;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
+  <svg class="flora" style="left:30%;bottom:3%;width:38px;height:38px;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
+  <svg class="flora" style="left:60%;bottom:9%;width:42px;height:42px;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
+  <svg class="flora" style="left:46%;bottom:1%;width:36px;height:36px;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
+
+  <!-- HIVES: hb_ skin sprite + Queen (beeSprite) standing in front -->
+  <div class="hive" style="left:26%;top:46%;" onclick="openHive('hive_buzz')">
+    <span class="lvl">Lv 5</span>
+    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_buzz"/></svg>
+    <span class="qstand" data-bee="q_coffee" data-size="50"></span>
+    <br><span class="nametag">Buzzed Hive</span>
+  </div>
+  <div class="hive" style="left:74%;top:43%;" onclick="openHive('hive_fort')">
+    <span class="lvl">Lv 4</span>
+    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_fort"/></svg>
+    <span class="qstand" data-bee="q_money" data-size="50"></span>
+    <br><span class="nametag">Fort Honey</span>
+  </div>
+  <div class="hive" style="left:38%;top:71%;" onclick="openHive('hive_bless')">
+    <span class="lvl">Lv 3</span>
+    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_bless"/></svg>
+    <span class="qstand" data-bee="q_angel" data-size="50"></span>
+    <br><span class="nametag">Blessed Hive</span>
+  </div>
+  <div class="hive" style="left:79%;top:71%;" onclick="openHive('hive_chill')">
+    <span class="lvl">Lv 2</span>
+    <svg class="hivesvg" viewBox="0 0 100 100"><use href="#hb_chill"/></svg>
+    <span class="qstand" data-bee="q_cool" data-size="50"></span>
+    <br><span class="nametag">Chill Hive</span>
+  </div>
+
+  <!-- floating mini-games -->
+  <div class="mini danger" style="left:11%;top:56%;" onclick="playMini('Robber Bees','grumble','A swarm is raiding! Tap-defend your honey.')">
+    <div class="orb"><span class="ring"></span><span data-bee="grumble" data-size="42"></span></div>
+    <div class="timer" data-secs="272">4:32</div>
+  </div>
+  <div class="mini" style="left:90%;top:52%;" onclick="playMini('Honey Drop','jar','Catch falling jars before they spill.')">
+    <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></div>
+    <div class="timer" data-secs="135">2:15</div>
+  </div>
+  <div class="mini cool" style="left:12%;top:78%;" onclick="playMini('Waggle Dance','q_disco','Match the dance to boost your rate.')">
+    <div class="orb"><span class="ring"></span><span data-bee="q_disco" data-size="42"></span></div>
+    <div class="timer" data-secs="408">6:48</div>
+  </div>
+  <div class="mini danger" style="left:62%;top:80%;" onclick="playMini('Hornet Watch','hornet','Swat hornets before they reach the hive.')">
+    <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_hornet"/></svg></div>
+    <div class="timer" data-secs="67">1:07</div>
+  </div>
 </div>
+
+<!-- logo (scaled down) -->
 <div class="logo-wrap"><img src="logo-title.png" alt="BeeMoji"></div>
+
 <!-- top-corner goal pips -->
-<div style="position:absolute;top:12px;left:12px;z-index:28;display:flex;gap:6px;">
+<div style="position:absolute;top:84px;left:12px;z-index:28;display:flex;gap:6px;">
   <div class="pip">
-          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
-          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
-          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg></span>
-          <span class="frac">8.4K</span>
-        </div>
+    <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+    <circle cx="29" cy="29" r="24" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
+    <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg></span>
+    <span class="frac">8.4K/8.4K</span>
+  </div>
   <div class="pip">
-          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
-          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--honey)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="6.0"/></svg>
-          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></span>
-          <span class="frac">2.2K</span>
-        </div>
+    <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+    <circle cx="29" cy="29" r="24" fill="none" stroke="var(--honey)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="6.5"/></svg>
+    <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></span>
+    <span class="frac">2.2K/2.3K</span>
+  </div>
 </div>
-<div style="position:absolute;top:12px;right:12px;z-index:28;display:flex;gap:6px;">
-  <div class="pip">
-          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
-          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--blue)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="75.4"/></svg>
-          <span class="ico"><svg viewBox="0 0 100 100"><use href="#n_market"/></svg></span>
-          <span class="frac">2/4</span>
-        </div>
-  <div class="pip">
-          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
-          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--purple)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
-          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg></span>
-          <span class="frac">x1.7</span>
-        </div>
-</div>
+
 <!-- player name tag -->
-<div style="position:absolute;top:158px;left:50%;transform:translateX(-50%);z-index:24;
-   background:var(--ink);color:#fff;border-radius:24px;padding:5px 16px;font-weight:800;font-size:13px;
+<div style="position:absolute;top:84px;right:12px;z-index:24;
+   background:var(--ink);color:#fff;border-radius:24px;padding:5px 14px;font-weight:800;font-size:13px;
    box-shadow:0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;gap:7px;white-space:nowrap;">
-   <svg viewBox="0 0 100 100" style="width:22px;height:22px"><use href="#a_q_money"/></svg>
-   Bubba's Bees &middot; Lv 5 &middot; Mesquite Flats &middot; x1.7</div>
-<div class="hud" style="top:192px;left:50%;transform:translateX(-50%);">
-      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_coin"/></svg><b>960</b></div>
-      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><b>200</b></div>
-      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jelly"/></svg><b>3</b></div>
-      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg><b>1.7K</b></div>
+   <span data-bee="q_money" data-size="22"></span>
+   Bubba's Bees &middot; Lv 5</div>
+
+<!-- currency HUD -->
+<div class="hud" style="top:128px;left:50%;transform:translateX(-50%);">
+  <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_coin"/></svg><b>960</b></div>
+  <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><b>200</b></div>
+  <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jelly"/></svg><b>3</b></div>
+  <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg><b>1.7K</b></div>
+</div>
+
+<!-- ===== HIVE POPOVERS ===== -->
+<div class="scrim" id="hive_buzz" onclick="if(event.target===this)closeHive()">
+  <div class="popcard">
+    <button class="x" onclick="closeHive()">&times;</button>
+    <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_buzz"/></svg>Buzzed Hive <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 5</span></h2>
+    <div class="popstats">
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>177/200</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>3.7/s</span>
+      <span class="stat"><span data-bee="q_coffee" data-size="20"></span>19 bees</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.5</span>
     </div>
-<!-- big floating harvest button -->
-<button class="btn honey" style="position:absolute;bottom:96px;left:50%;transform:translateX(-50%);z-index:35;
-  font-size:20px;padding:16px 30px;border-radius:30px;display:flex;align-items:center;gap:10px;"
-  onclick="playMini('Harvest All','a_jar','Collected honey from all hives! +540 jars')">
-  <svg viewBox="0 0 100 100" style="width:34px;height:34px"><use href="#a_jar"/></svg> Harvest</button>
-<div class="scrim" id="hive_club" onclick="if(event.target===this)closeHive()">
-          <div class="popcard">
-            <button class="x" onclick="closeHive()">&times;</button>
-            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_club"/></svg>Gentlebee Club <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 5</span></h2>
-            <div class="popstats">
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>177/200</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>3.7/s</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>19 bees</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.5</span>
-            </div>
-            <div class="barwrap"><div class="lab"><span>Honey store</span><span>177/200</span></div><div class="bar"><i style="width:88%"></i></div></div>
-            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
-            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_money"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_forager"/></svg><span class="role">Forager</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_nurse"/></svg><span class="role">Nurse</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_guard"/></svg><span class="role">Guard</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_scout"/></svg><span class="role">Scout</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
-            <div style="margin-top:14px;display:flex;gap:10px;">
-              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 177 jars from Gentlebee Club!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
-              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
-            </div>
-          </div>
-        </div><div class="scrim" id="hive_star" onclick="if(event.target===this)closeHive()">
-          <div class="popcard">
-            <button class="x" onclick="closeHive()">&times;</button>
-            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_star"/></svg>Star Skep <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 4</span></h2>
-            <div class="popstats">
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>88/150</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>2.1/s</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>11 bees</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.2</span>
-            </div>
-            <div class="barwrap"><div class="lab"><span>Honey store</span><span>88/150</span></div><div class="bar"><i style="width:58%"></i></div></div>
-            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
-            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_star"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_builder"/></svg><span class="role">Builder</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_drone"/></svg><span class="role">Drone</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
-            <div style="margin-top:14px;display:flex;gap:10px;">
-              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 88 jars from Star Skep!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
-              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
-            </div>
-          </div>
-        </div><div class="scrim" id="hive_love" onclick="if(event.target===this)closeHive()">
-          <div class="popcard">
-            <button class="x" onclick="closeHive()">&times;</button>
-            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_love"/></svg>Lovebug Lodge <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 3</span></h2>
-            <div class="popstats">
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>40/120</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>1.4/s</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>6 bees</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
-            </div>
-            <div class="barwrap"><div class="lab"><span>Honey store</span><span>40/120</span></div><div class="bar"><i style="width:33%"></i></div></div>
-            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
-            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_love"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_forager"/></svg><span class="role">Forager</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
-            <div style="margin-top:14px;display:flex;gap:10px;">
-              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 40 jars from Lovebug Lodge!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
-              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
-            </div>
-          </div>
-        </div><div class="scrim" id="hive_chill" onclick="if(event.target===this)closeHive()">
-          <div class="popcard">
-            <button class="x" onclick="closeHive()">&times;</button>
-            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_chill"/></svg>Chillhive <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 2</span></h2>
-            <div class="popstats">
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>12/80</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>0.6/s</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>3 bees</span>
-              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
-            </div>
-            <div class="barwrap"><div class="lab"><span>Honey store</span><span>12/80</span></div><div class="bar"><i style="width:15%"></i></div></div>
-            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
-            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_cool"/></svg><span class="role">Queen</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
-            <div style="margin-top:14px;display:flex;gap:10px;">
-              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 12 jars from Chillhive!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
-              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
-            </div>
-          </div>
-        </div>
+    <div class="barwrap"><div class="lab"><span>Honey store</span><span>177/200</span></div><div class="bar"><i style="width:88%"></i></div></div>
+    <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+    <div class="slots">
+      <div class="slot queen" data-bee="q_coffee" data-size="62"><span class="role">Coffee Queen</span></div>
+      <div class="slot filled" data-bee="w_forager" data-size="62"><span class="role">Forager</span></div>
+      <div class="slot filled" data-bee="w_nurse" data-size="62"><span class="role">Nurse</span></div>
+      <div class="slot filled" data-bee="w_guard" data-size="62"><span class="role">Guard</span></div>
+      <div class="slot filled" data-bee="w_scout" data-size="62"><span class="role">Scout</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','jar','Harvested 177 jars from Buzzed Hive!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+      <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="hive_fort" onclick="if(event.target===this)closeHive()">
+  <div class="popcard">
+    <button class="x" onclick="closeHive()">&times;</button>
+    <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_fort"/></svg>Fort Honey <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 4</span></h2>
+    <div class="popstats">
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>88/150</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>2.1/s</span>
+      <span class="stat"><span data-bee="q_money" data-size="20"></span>11 bees</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.2</span>
+    </div>
+    <div class="barwrap"><div class="lab"><span>Honey store</span><span>88/150</span></div><div class="bar"><i style="width:58%"></i></div></div>
+    <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+    <div class="slots">
+      <div class="slot queen" data-bee="q_money" data-size="62"><span class="role">Money Queen</span></div>
+      <div class="slot filled" data-bee="w_builder" data-size="62"><span class="role">Builder</span></div>
+      <div class="slot filled" data-bee="w_drone" data-size="62"><span class="role">Drone</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','jar','Harvested 88 jars from Fort Honey!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+      <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="hive_bless" onclick="if(event.target===this)closeHive()">
+  <div class="popcard">
+    <button class="x" onclick="closeHive()">&times;</button>
+    <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_bless"/></svg>Blessed Hive <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 3</span></h2>
+    <div class="popstats">
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>40/120</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>1.4/s</span>
+      <span class="stat"><span data-bee="q_angel" data-size="20"></span>6 bees</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
+    </div>
+    <div class="barwrap"><div class="lab"><span>Honey store</span><span>40/120</span></div><div class="bar"><i style="width:33%"></i></div></div>
+    <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+    <div class="slots">
+      <div class="slot queen" data-bee="q_angel" data-size="62"><span class="role">Angel Queen</span></div>
+      <div class="slot filled" data-bee="w_nurse" data-size="62"><span class="role">Nurse</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','jar','Harvested 40 jars from Blessed Hive!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+      <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="hive_chill" onclick="if(event.target===this)closeHive()">
+  <div class="popcard">
+    <button class="x" onclick="closeHive()">&times;</button>
+    <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_chill"/></svg>Chill Hive <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 2</span></h2>
+    <div class="popstats">
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>12/80</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>0.6/s</span>
+      <span class="stat"><span data-bee="q_cool" data-size="20"></span>3 bees</span>
+      <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
+    </div>
+    <div class="barwrap"><div class="lab"><span>Honey store</span><span>12/80</span></div><div class="bar"><i style="width:15%"></i></div></div>
+    <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+    <div class="slots">
+      <div class="slot queen" data-bee="q_cool" data-size="62"><span class="role">Cool Queen</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+      <div class="slot"><span class="plus">+</span><span class="role">Empty</span></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;">
+      <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','jar','Harvested 12 jars from Chill Hive!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+      <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+    </div>
+  </div>
+</div>
+
+<!-- mini-game toast -->
 <div class="toast" id="toast" onclick="event.stopPropagation()">
-      <h3 id="toast-h"></h3>
-      <p id="toast-p"></p>
-      <div class="row">
-        <button class="btn honey" onclick="closeToast()">Play</button>
-        <button class="btn green" onclick="closeToast()">Later</button>
-      </div>
-    </div>
-<nav class="nav"><button class="active"><svg viewBox="0 0 100 100"><use href="#n_hive"/></svg>Apiary</button><button><svg viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button><button><svg viewBox="0 0 100 100"><use href="#n_shop"/></svg>Shop</button><button><svg viewBox="0 0 100 100"><use href="#n_market"/></svg>Market</button><button><svg viewBox="0 0 100 100"><use href="#n_hub"/></svg>Hub</button><button><svg viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button></nav>
+  <h3 id="toast-h"></h3>
+  <p id="toast-p"></p>
+  <div class="row">
+    <button class="btn honey" onclick="closeToast()">Play</button>
+    <button class="btn green" onclick="closeToast()">Later</button>
+  </div>
+</div>
+
+<!-- harvest +honey toast -->
+<div class="honeytoast" id="honeytoast"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><span id="honeytoast-t">+540 honey</span></div>
+
+<!-- bottom nav: 3 left + center notch + 3 right -->
+<nav class="nav">
+  <div class="navside">
+    <button class="active"><svg viewBox="0 0 100 100"><use href="#n_hive"/></svg>Apiary</button>
+    <button><svg viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button>
+    <button><svg viewBox="0 0 100 100"><use href="#n_shop"/></svg>Shop</button>
+  </div>
+  <div class="navgap"></div>
+  <div class="navside">
+    <button><svg viewBox="0 0 100 100"><use href="#n_market"/></svg>Market</button>
+    <button><svg viewBox="0 0 100 100"><use href="#n_hub"/></svg>Hub</button>
+    <button><svg viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button>
+  </div>
+</nav>
+
+<!-- FUSED GLOWING HARVEST JAR BUTTON (no text) -->
+<button class="harvest ready" id="harvestBtn" aria-label="Harvest" onclick="doHarvest()">
+  <svg class="jar" viewBox="0 0 100 100"><use href="#a_jar"/></svg>
+</button>
 
 </div>
+
+<!-- REAL BeeMoji rendering system -->
+<script src="beemoji-art.js"></script>
 <script>
+// Render real layered BeeMoji characters into every [data-bee] placeholder.
+function renderBees(){
+  document.querySelectorAll('[data-bee]').forEach(function(el){
+    if(el.dataset.beeDone) return;
+    var key=el.getAttribute('data-bee');
+    var size=parseInt(el.getAttribute('data-size'),10)||48;
+    var spec=null;
+    if(QUEEN_LOOKS[key]) spec=QUEEN_LOOKS[key];
+    else if(WORKER_LOOKS[key]) spec=WORKER_LOOKS[key];
+    else if(key==='grumble') spec={body:'purple',face:'grimace',acc:'bandit_mask'};
+    else spec={body:'yellow',face:'happy'};
+    el.insertAdjacentHTML('afterbegin', beeSprite(spec,size));
+    el.dataset.beeDone='1';
+  });
+}
+
 function openHive(id){
   document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));
   var el=document.getElementById(id); if(el) el.classList.add('show');
 }
 function closeHive(){document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));}
-var toastT=null;
-function playMini(title,iconId,desc){
+
+function playMini(title,iconKey,desc){
   var t=document.getElementById('toast');
-  document.getElementById('toast-h').innerHTML='<svg viewBox="0 0 100 100"><use href="#'+iconId+'"/></svg>'+title;
+  var head=document.getElementById('toast-h');
+  var icon='';
+  if(iconKey==='jar') icon='<svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>';
+  else if(iconKey==='hornet') icon='<svg viewBox="0 0 100 100"><use href="#a_hornet"/></svg>';
+  else if(QUEEN_LOOKS[iconKey]) icon=beeSprite(QUEEN_LOOKS[iconKey],44);
+  else if(iconKey==='grumble') icon=beeSprite({body:'purple',face:'grimace',acc:'bandit_mask'},44);
+  else icon='<svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>';
+  head.innerHTML=icon+title;
   document.getElementById('toast-p').textContent=desc;
   t.classList.add('show');
 }
 function closeToast(){document.getElementById('toast').classList.remove('show');}
-// live countdown ticking so minigames "expire"
+
+// HARVEST center button: glow toggle + toast
+var harvestReady=true;
+function setHarvestReady(on){
+  harvestReady=on;
+  document.getElementById('harvestBtn').classList.toggle('ready',on);
+}
+function doHarvest(){
+  setHarvestReady(false);
+  var amt=[420,540,610,360][Math.floor(Math.random()*4)];
+  var ht=document.getElementById('honeytoast');
+  document.getElementById('honeytoast-t').textContent='+'+amt+' honey';
+  ht.classList.add('show');
+  setTimeout(function(){ht.classList.remove('show');},1500);
+  setTimeout(function(){setHarvestReady(true);},1900);
+}
+
 window.addEventListener('DOMContentLoaded',function(){
+  renderBees();
+  // default harvest glow ON (ready)
+  setHarvestReady(true);
+  // live countdown ticking so minigames "expire"
   document.querySelectorAll('[data-secs]').forEach(function(el){
     var s=parseInt(el.getAttribute('data-secs'),10);
     function tick(){
