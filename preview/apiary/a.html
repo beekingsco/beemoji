@@ -41,12 +41,12 @@ body{
 .beespr .bb-acc{position:absolute;left:50%;transform:translateX(-50%);height:auto;z-index:3;filter:drop-shadow(0 1px 1px rgba(0,0,0,.18));}
 /* board / landscape */
 .board{position:absolute;inset:0;overflow:hidden;}
-.sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky1) 0%,#C8F0FF 32%,var(--sky2) 60%);}
-.hills{position:absolute;left:-5%;right:-5%;top:38%;height:30%;
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky1) 0%,#BEEBFF 55%,#E9F8FF 100%);}
+.hills{position:absolute;left:-5%;right:-5%;top:24%;height:22%;
   background:radial-gradient(120% 100% at 30% 100%,#8fd98f 0%,#7bcf7b 60%,transparent 61%),
              radial-gradient(120% 100% at 75% 100%,#9fe09f 0%,#86d586 60%,transparent 61%);
   filter:saturate(1.05);}
-.ground{position:absolute;left:0;right:0;bottom:0;top:52%;
+.ground{position:absolute;left:0;right:0;bottom:0;top:32%;
   background:linear-gradient(180deg,#7fd07f 0%,#62bd57 45%,#4fae49 100%);}
 .ground::before{content:"";position:absolute;inset:0;opacity:.25;
   background:radial-gradient(circle at 20% 30%,#3f9e3f 2px,transparent 3px),
@@ -54,7 +54,19 @@ body{
             radial-gradient(circle at 40% 70%,#3f9e3f 2px,transparent 3px),
             radial-gradient(circle at 85% 80%,#3f9e3f 2px,transparent 3px);
   background-size:90px 90px,120px 120px,70px 70px,140px 140px;}
-.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(.3px);}
+.cloud{position:absolute;z-index:0;pointer-events:none;filter:drop-shadow(0 6px 5px rgba(120,160,200,.18));}
+.cloud svg{display:block;width:100%;height:auto;}
+.cloud.d1{animation:drift1 38s linear infinite;}
+.cloud.d2{animation:drift2 46s linear infinite;}
+.cloud.d3{animation:drift1 54s linear infinite;}
+@keyframes drift1{0%{transform:translateX(0)}50%{transform:translateX(22px)}100%{transform:translateX(0)}}
+@keyframes drift2{0%{transform:translateX(0)}50%{transform:translateX(-20px)}100%{transform:translateX(0)}}
+/* real beekeeper standing beside a hive */
+.keeper{position:absolute;z-index:9;pointer-events:none;
+  transform:translate(-50%,-100%);
+  transition:left .55s cubic-bezier(.34,1.1,.5,1), top .55s cubic-bezier(.34,1.1,.5,1);
+  filter:drop-shadow(0 5px 4px rgba(0,0,0,.25));}
+.keeper svg{display:block;}
 .flora{position:absolute;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));pointer-events:none;z-index:1;}
 /* logo - SCALED DOWN */
 .logo-wrap{position:absolute;top:6px;left:0;right:0;display:flex;justify-content:center;z-index:30;pointer-events:none;}
@@ -112,13 +124,22 @@ body{
 .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #287528;}
 .btn.honey:active{box-shadow:0 1px 0 #9c5e00;}
 .btn.blue:active{box-shadow:0 1px 0 #1e6e9c;}
-/* bottom nav with center notch */
+/* bottom nav with center bump (Monopoly GO style) */
 .nav{position:absolute;left:0;right:0;bottom:0;height:78px;z-index:40;
   background:linear-gradient(var(--cream),#FFEFD0);border-top:3px solid #E9CF95;
   display:flex;align-items:center;padding:4px 6px 10px;
   box-shadow:0 -4px 14px rgba(0,0,0,.12);}
+/* the raised circular bump on the top edge that wraps the harvest button */
+.navbump{position:absolute;left:50%;bottom:48px;transform:translateX(-50%);z-index:41;
+  width:108px;height:108px;border-radius:50%;pointer-events:none;
+  background:linear-gradient(#FFF8EA,#FFF0D2);
+  border:3px solid #E9CF95;
+  box-shadow:0 -4px 12px rgba(0,0,0,.10);}
+/* mask the lower portion of the bump so it merges flush into the bar (no seam) */
+.navbump::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-3px;height:56px;
+  background:linear-gradient(#FFF3DE,#FFEFD0);border-bottom-left-radius:0;border-bottom-right-radius:0;}
 .nav .navside{flex:1;display:flex;align-items:center;justify-content:space-around;}
-.nav .navgap{width:96px;flex:none;}
+.nav .navgap{width:108px;flex:none;}
 .nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
   align-items:center;gap:1px;font-family:inherit;color:#9a8055;font-weight:700;font-size:10px;
   flex:1;position:relative;padding-top:6px;}
@@ -127,8 +148,8 @@ body{
 .nav button.active svg{opacity:1;}
 .nav button.active::after{content:"";position:absolute;top:0;width:26px;height:4px;border-radius:4px;background:var(--honey);}
 /* HARVEST FUSED CENTER BUTTON (Monopoly GO style) */
-.harvest{position:absolute;left:50%;bottom:42px;transform:translateX(-50%);z-index:46;
-  width:84px;height:84px;border-radius:50%;border:5px solid var(--ink);cursor:pointer;
+.harvest{position:absolute;left:50%;bottom:64px;transform:translateX(-50%);z-index:46;
+  width:80px;height:80px;border-radius:50%;border:5px solid var(--ink);cursor:pointer;
   background:radial-gradient(circle at 38% 30%,#FFE9A8 0%,var(--gold) 42%,var(--honey-d) 100%);
   display:flex;align-items:center;justify-content:center;padding:0;
   box-shadow:0 6px 0 #9c5e00, 0 10px 18px rgba(0,0,0,.35);
@@ -392,13 +413,40 @@ body{
 
 <div class="board">
   <div class="sky"></div>
-  <div class="cloud" style="top:6%;left:6%;width:60px;height:18px;opacity:.6;filter:blur(2px);"></div>
-  <div class="cloud" style="top:30%;left:70%;width:74px;height:20px;opacity:.5;filter:blur(2px);"></div>
-  <div class="cloud" style="top:34%;left:20%;width:50px;height:15px;opacity:.45;filter:blur(2px);"></div>
+  <div class="cloud d1" style="top:4%;left:5%;width:96px;">
+    <svg viewBox="0 0 140 80"><g fill="#FFFFFF" stroke="#EAF4FB" stroke-width="1">
+      <ellipse cx="70" cy="52" rx="46" ry="22"/><circle cx="44" cy="44" r="22"/>
+      <circle cx="72" cy="34" r="27"/><circle cx="100" cy="46" r="20"/><circle cx="58" cy="50" r="20"/></g>
+      <ellipse cx="70" cy="70" rx="46" ry="7" fill="#EAF4FB" opacity=".5"/></svg>
+  </div>
+  <div class="cloud d2" style="top:9%;left:58%;width:120px;">
+    <svg viewBox="0 0 160 86"><g fill="#FDFDFF" stroke="#EAF4FB" stroke-width="1">
+      <ellipse cx="80" cy="56" rx="54" ry="24"/><circle cx="48" cy="46" r="24"/>
+      <circle cx="82" cy="34" r="30"/><circle cx="116" cy="48" r="23"/><circle cx="64" cy="50" r="22"/></g>
+      <ellipse cx="80" cy="76" rx="54" ry="7" fill="#EAF4FB" opacity=".5"/></svg>
+  </div>
+  <div class="cloud d3" style="top:20%;left:24%;width:78px;">
+    <svg viewBox="0 0 130 74"><g fill="#FFFFFF" stroke="#EAF4FB" stroke-width="1">
+      <ellipse cx="65" cy="48" rx="42" ry="20"/><circle cx="42" cy="40" r="20"/>
+      <circle cx="68" cy="30" r="24"/><circle cx="94" cy="42" r="18"/></g>
+      <ellipse cx="65" cy="64" rx="42" ry="6" fill="#EAF4FB" opacity=".5"/></svg>
+  </div>
   <div class="hills"></div>
   <div class="ground"></div>
-  <svg class="flora" style="left:8%;bottom:4%;width:34px;height:34px;opacity:.8;z-index:0;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
-  <svg class="flora" style="left:86%;bottom:3%;width:32px;height:32px;opacity:.8;z-index:0;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
+  <!-- meadow flowers nestled on the ground, behind hives, no overlaps -->
+  <svg class="flora" style="left:4%;top:38%;width:32px;height:32px;opacity:.92;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
+  <svg class="flora" style="left:93%;top:38%;width:32px;height:32px;opacity:.92;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
+  <svg class="flora" style="left:50%;top:58%;width:28px;height:28px;opacity:.9;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
+  <svg class="flora" style="left:6%;top:73%;width:26px;height:26px;opacity:.9;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
+  <svg class="flora" style="left:94%;top:73%;width:26px;height:26px;opacity:.9;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_poplar"/></svg>
+  <svg class="flora" style="left:4%;top:64%;width:34px;height:34px;opacity:.92;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
+  <svg class="flora" style="left:93%;top:64%;width:34px;height:34px;opacity:.92;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_buck"/></svg>
+  <svg class="flora" style="left:54%;top:78%;width:28px;height:28px;opacity:.9;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
+  <svg class="flora" style="left:46%;top:78%;width:28px;height:28px;opacity:.9;z-index:1;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
+
+  <!-- real beekeeper standing on the ground beside a hive (positioned/moved by JS) -->
+  <div id="keeper" class="keeper"></div>
+
 
   <!-- HIVES: real #a_hive structure + small theme badge accent + Queen standing beside -->
   <div class="hive" style="left:27%;top:47%;" onclick="openHive('hive_buzz')">
@@ -595,8 +643,9 @@ body{
 <!-- harvest +honey toast -->
 <div class="honeytoast" id="honeytoast"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><span id="honeytoast-t">+540 honey</span></div>
 
-<!-- bottom nav: 3 left + center notch + 3 right -->
+<!-- bottom nav: 3 left + center bump + 3 right (Monopoly GO fused bar) -->
 <nav class="nav">
+  <div class="navbump"></div>
   <div class="navside">
     <button class="active"><svg viewBox="0 0 100 100"><use href="#n_hive"/></svg>Apiary</button>
     <button><svg viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button>
@@ -619,6 +668,7 @@ body{
 
 <!-- REAL BeeMoji rendering system -->
 <script src="beemoji-art.js"></script>
+<script src="keeper.js"></script>
 <script>
 // Render real layered BeeMoji characters into every [data-bee] placeholder.
 function renderBees(){
@@ -639,8 +689,30 @@ function renderBees(){
 function openHive(id){
   document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));
   var el=document.getElementById(id); if(el) el.classList.add('show');
+  moveKeeperTo(id);
 }
 function closeHive(){document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));}
+
+// Beekeeper positions: feet on the ground, just beside each hive.
+// left/top are the keeper's feet point (transform translate(-50%,-100%)).
+var KEEPER_SPOTS={
+  hive_buzz : {left:9,  top:57},
+  hive_fort : {left:91, top:57},
+  hive_bless: {left:9,  top:83},
+  hive_chill: {left:91, top:83}
+};
+function placeKeeper(){
+  var k=document.getElementById('keeper');
+  if(k && typeof keeperSVG==='function'){
+    k.innerHTML=keeperSVG({style:"boy",skin:"#F5C9A0",hair:"#4A2E14"},70);
+    var s=KEEPER_SPOTS.hive_buzz;
+    k.style.left=s.left+'%'; k.style.top=s.top+'%';
+  }
+}
+function moveKeeperTo(id){
+  var k=document.getElementById('keeper'); var s=KEEPER_SPOTS[id];
+  if(k&&s){ k.style.left=s.left+'%'; k.style.top=s.top+'%'; }
+}
 
 function playMini(title,iconKey,desc){
   var t=document.getElementById('toast');
@@ -675,6 +747,7 @@ function doHarvest(){
 
 window.addEventListener('DOMContentLoaded',function(){
   renderBees();
+  placeKeeper();
   // default harvest glow ON (ready)
   setHarvestReady(true);
   // live countdown ticking so minigames "expire"
