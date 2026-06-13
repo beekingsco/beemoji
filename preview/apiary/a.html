@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BeeMoji Apiary - Minimal Float</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --honey:#FFB42B; --honey-d:#E08700; --gold:#FFD23E;
+  --sky1:#9BE2FF; --sky2:#FFEFC2;
+  --ink:#2A1A06; --white:#FFFFFF; --cream:#FFF8EA;
+  --green:#5BC85B; --green-d:#3A9E3A;
+  --blue:#4FB7F0; --blue-d:#2F8FC9;
+  --purple:#9A5BE0; --purple-d:#7440B5;
+  --red:#F05B5B; --red-d:#C93A3A;
+  --r:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  font-family:'Baloo 2','Nunito',system-ui,-apple-system,sans-serif;
+  background:#1c130a;
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh;
+}
+#phone{
+  position:relative;
+  width:430px; height:900px;
+  max-width:100vw; max-height:100vh;
+  overflow:hidden;
+  border-radius:42px;
+  box-shadow:0 0 0 12px #0e0a05, 0 0 0 14px #2a2018, 0 30px 70px rgba(0,0,0,.6);
+  background:linear-gradient(#9BE2FF,#FFEFC2);
+}
+.hidden-sprites{position:absolute;width:0;height:0;overflow:hidden;}
+/* board / landscape */
+.board{position:absolute;inset:0;overflow:hidden;}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,var(--sky1) 0%,#C8F0FF 32%,var(--sky2) 60%);}
+.hills{position:absolute;left:-5%;right:-5%;top:38%;height:30%;
+  background:radial-gradient(120% 100% at 30% 100%,#8fd98f 0%,#7bcf7b 60%,transparent 61%),
+             radial-gradient(120% 100% at 75% 100%,#9fe09f 0%,#86d586 60%,transparent 61%);
+  filter:saturate(1.05);}
+.ground{position:absolute;left:0;right:0;bottom:0;top:52%;
+  background:linear-gradient(180deg,#7fd07f 0%,#62bd57 45%,#4fae49 100%);}
+.ground::before{content:"";position:absolute;inset:0;opacity:.25;
+  background:radial-gradient(circle at 20% 30%,#3f9e3f 2px,transparent 3px),
+            radial-gradient(circle at 60% 50%,#3f9e3f 2px,transparent 3px),
+            radial-gradient(circle at 40% 70%,#3f9e3f 2px,transparent 3px),
+            radial-gradient(circle at 85% 80%,#3f9e3f 2px,transparent 3px);
+  background-size:90px 90px,120px 120px,70px 70px,140px 140px;}
+.cloud{position:absolute;background:#fff;border-radius:50px;opacity:.85;filter:blur(.3px);}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%;}
+/* decorative flora on ground */
+.flora{position:absolute;filter:drop-shadow(0 3px 0 rgba(0,0,0,.12));}
+/* logo */
+.logo-wrap{position:absolute;top:2px;left:0;right:0;display:flex;justify-content:center;z-index:30;pointer-events:none;}
+.logo-wrap img{width:150px;height:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3));}
+/* HUD currency pills */
+.hud{position:absolute;display:flex;gap:7px;z-index:25;}
+.pill{display:flex;align-items:center;gap:4px;background:var(--cream);
+  border:3px solid var(--ink);border-radius:30px;padding:3px 11px 3px 4px;
+  box-shadow:0 3px 0 rgba(0,0,0,.25);}
+.pill svg{width:26px;height:26px;flex:none;}
+.pill b{font-size:15px;color:var(--ink);font-weight:800;}
+/* hives on board */
+.hive{position:absolute;cursor:pointer;transform:translate(-50%,-50%);
+  transition:transform .12s;z-index:10;text-align:center;}
+.hive:active{transform:translate(-50%,-50%) scale(.94);}
+.hive .hivesvg{width:92px;height:92px;display:block;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25));}
+.hive .badge{position:absolute;top:-6px;right:2px;width:34px;height:34px;
+  background:#fff;border:3px solid var(--ink);border-radius:50%;padding:2px;
+  box-shadow:0 2px 0 rgba(0,0,0,.2);}
+.hive .qbubble{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+  width:40px;height:40px;background:#fff;border:3px solid var(--ink);border-radius:50%;
+  padding:2px;box-shadow:0 2px 0 rgba(0,0,0,.2);}
+.hive .nametag{display:inline-block;margin-top:-4px;background:var(--ink);color:#fff;
+  font-size:11px;font-weight:800;padding:2px 9px;border-radius:20px;white-space:nowrap;
+  box-shadow:0 2px 0 rgba(0,0,0,.3);}
+.hive .lvl{position:absolute;top:-4px;left:0;background:var(--honey);color:var(--ink);
+  border:2.5px solid var(--ink);border-radius:30px;font-size:11px;font-weight:800;
+  padding:0 7px;box-shadow:0 2px 0 rgba(0,0,0,.25);}
+/* floating mini-games */
+.mini{position:absolute;cursor:pointer;transform:translate(-50%,-50%);z-index:15;
+  animation:bob 2.6s ease-in-out infinite;text-align:center;}
+.mini .orb{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--gold));
+  border:3.5px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 0 rgba(0,0,0,.22);position:relative;}
+.mini .orb svg{width:42px;height:42px;}
+.mini.danger .orb{background:radial-gradient(circle at 35% 30%,#ffd0d0,var(--red));}
+.mini.cool .orb{background:radial-gradient(circle at 35% 30%,#d6f0ff,var(--blue));}
+.mini .timer{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--gold);font-size:11px;font-weight:800;
+  padding:1px 8px;border-radius:20px;border:2px solid var(--gold);white-space:nowrap;}
+.mini .ring{position:absolute;inset:-5px;border-radius:50%;border:3px dashed rgba(255,255,255,.7);
+  animation:spin 7s linear infinite;}
+@keyframes bob{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-9px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* candy buttons */
+.btn{border:none;border-radius:24px;font-family:inherit;font-weight:800;color:#fff;
+  cursor:pointer;font-size:17px;padding:13px 22px;position:relative;
+  text-shadow:0 1px 1px rgba(0,0,0,.25);transition:transform .08s,box-shadow .08s;}
+.btn::before{content:"";position:absolute;inset:2px 2px auto 2px;height:42%;border-radius:20px;
+  background:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,0));pointer-events:none;}
+.btn.green{background:linear-gradient(#7ee07e,var(--green-d));box-shadow:0 5px 0 #287528;}
+.btn.honey{background:linear-gradient(var(--gold),var(--honey-d));box-shadow:0 5px 0 #9c5e00;color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.4);}
+.btn.blue{background:linear-gradient(#7fccf5,var(--blue-d));box-shadow:0 5px 0 #1e6e9c;}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #287528;}
+.btn.honey:active{box-shadow:0 1px 0 #9c5e00;}
+.btn.blue:active{box-shadow:0 1px 0 #1e6e9c;}
+/* bottom nav */
+.nav{position:absolute;left:0;right:0;bottom:0;height:74px;z-index:40;
+  background:linear-gradient(var(--cream),#FFEFD0);border-top:3px solid #E9CF95;
+  display:flex;align-items:center;justify-content:space-around;padding:4px 6px 8px;
+  box-shadow:0 -4px 14px rgba(0,0,0,.12);}
+.nav button{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;gap:1px;font-family:inherit;color:#9a8055;font-weight:700;font-size:10px;
+  flex:1;position:relative;padding-top:6px;}
+.nav button svg{width:30px;height:30px;opacity:.6;}
+.nav button.active{color:var(--ink);}
+.nav button.active svg{opacity:1;}
+.nav button.active::after{content:"";position:absolute;top:0;width:26px;height:4px;border-radius:4px;background:var(--honey);}
+/* popover overlay */
+.scrim{position:absolute;inset:0;background:rgba(20,12,4,.45);z-index:50;display:none;
+  align-items:flex-end;justify-content:center;backdrop-filter:blur(1px);}
+.scrim.show{display:flex;}
+.popcard{width:100%;background:linear-gradient(180deg,#FFF8EA,#FFEFCF);border-top-left-radius:28px;
+  border-top-right-radius:28px;border:4px solid var(--ink);border-bottom:none;
+  padding:16px 18px 92px;transform:translateY(100%);transition:transform .3s cubic-bezier(.2,.9,.3,1.2);
+  max-height:74%;overflow:auto;}
+.scrim.show .popcard{transform:translateY(0);}
+.popcard h2{font-size:21px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.popcard .x{position:absolute;top:10px;right:14px;width:38px;height:38px;border-radius:50%;
+  background:var(--red);border:3px solid var(--ink);color:#fff;font-weight:900;font-size:20px;
+  cursor:pointer;box-shadow:0 3px 0 var(--red-d);}
+.popstats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px;}
+.stat{background:#fff;border:2.5px solid var(--ink);border-radius:14px;padding:5px 10px;
+  font-weight:800;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:5px;}
+.stat svg{width:20px;height:20px;}
+.barwrap{margin:10px 0;}
+.barwrap .lab{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--ink);margin-bottom:3px;}
+.bar{height:16px;border-radius:12px;background:#E6D3A6;border:2.5px solid var(--ink);overflow:hidden;}
+.bar i{display:block;height:100%;background:linear-gradient(var(--gold),var(--honey));border-radius:10px;}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.slot{aspect-ratio:1;border-radius:18px;border:3px dashed #C9A85E;background:#FFFDF6;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+.slot.queen{border-style:solid;border-color:var(--honey);background:#FFF3D6;}
+.slot.filled{border-style:solid;border-color:var(--ink);background:#fff;}
+.slot svg{width:62px;height:62px;}
+.slot .role{position:absolute;bottom:4px;font-size:10px;font-weight:800;color:#7a6534;}
+.slot .plus{font-size:40px;color:#C9A85E;font-weight:800;line-height:1;}
+/* toast */
+.toast{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) scale(.85);
+  z-index:60;background:var(--cream);border:4px solid var(--ink);border-radius:24px;
+  padding:18px 22px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.4);
+  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;width:250px;}
+.toast.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+.toast h3{font-size:19px;color:var(--ink);margin-bottom:4px;display:flex;gap:7px;align-items:center;justify-content:center;}
+.toast svg{width:44px;height:44px;}
+.toast p{font-size:13px;color:#6a583a;font-weight:700;margin-bottom:12px;}
+.toast .row{display:flex;gap:8px;}
+.toast .btn{flex:1;font-size:15px;padding:11px;}
+/* progress pip rings (variant A) */
+.pip{width:58px;height:58px;position:relative;}
+.pip svg.ring{position:absolute;inset:0;transform:rotate(-90deg);}
+.pip .ico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.pip .ico svg{width:30px;height:30px;}
+.pip .frac{position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);
+  font-size:9.5px;font-weight:800;color:var(--ink);background:var(--cream);
+  border:2px solid var(--ink);border-radius:20px;padding:0 5px;white-space:nowrap;}
+</style>
+</head><body>
+<div class="hidden-sprites"><svg width="0" height="0" style="position:absolute">
+<defs>
+<!-- base bee -->
+<g id="beebase">
+  <path d="M36 20 q-6 -10 -14 -11" fill="none" stroke="#2A1A06" stroke-width="6" stroke-linecap="round"/>
+  <path d="M64 20 q6 -10 14 -11" fill="none" stroke="#2A1A06" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="21" cy="9" r="4.5" fill="#2A1A06"/><circle cx="79" cy="9" r="4.5" fill="#2A1A06"/>
+  <ellipse cx="14" cy="63" rx="11" ry="13" fill="#EDF6F9" stroke="#2A1A06" stroke-width="5"/>
+  <ellipse cx="86" cy="63" rx="11" ry="13" fill="#EDF6F9" stroke="#2A1A06" stroke-width="5"/>
+  <ellipse cx="12" cy="46" rx="12" ry="15" fill="#F6FBFD" stroke="#2A1A06" stroke-width="5"/>
+  <ellipse cx="88" cy="46" rx="12" ry="15" fill="#F6FBFD" stroke="#2A1A06" stroke-width="5"/>
+  <path d="M50 17 C73 17 89 34 89 56 C89 76 74 91 50 98 C26 91 11 76 11 56 C11 34 27 17 50 17 Z" fill="#FFE066" stroke="#2A1A06" stroke-width="6"/>
+  <path d="M13 64 q37 18 74 0 l-3 11 q-34 15 -68 0 z" fill="#2A1A06"/>
+  <path d="M22 82 q28 13 56 0 l-4 9 q-24 11 -48 0 z" fill="#2A1A06"/>
+</g>
+<g id="facehappy">
+  <circle cx="40" cy="50" r="4.5" fill="#2A1A06"/><circle cx="60" cy="50" r="4.5" fill="#2A1A06"/>
+  <path d="M42 62 Q50 69 58 62" fill="none" stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"/>
+</g>
+<g id="crown">
+  <path d="M34 18 L38 6 L46 14 L50 3 L54 14 L62 6 L66 18 Z" fill="#9FD8EA" stroke="#2A1A06" stroke-width="4" stroke-linejoin="round"/>
+</g>
+
+<!-- QUEENS -->
+<symbol id="a_q_coffee" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <path d="M37 49 Q40 46 43 49" stroke="#2A1A06" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M57 49 Q60 46 63 49" stroke="#2A1A06" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <rect x="42" y="60" width="18" height="13" rx="4" fill="#fff" stroke="#2A1A06" stroke-width="4"/>
+  <path d="M60 63 q7 2 0 7" fill="none" stroke="#2A1A06" stroke-width="4"/>
+  <path d="M46 56 q2 -4 0 -7 M52 56 q2 -4 0 -7" stroke="#B9B9B9" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_sleepy" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <path d="M35 51 Q40 55 45 51 M55 51 Q60 55 65 51" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <circle cx="50" cy="63" r="4" fill="#2A1A06"/>
+  <text x="66" y="34" font-family="Baloo 2,system-ui" font-weight="800" font-size="20" fill="#2D49C8" stroke="#fff" stroke-width="1">z</text>
+  <text x="76" y="22" font-family="Baloo 2,system-ui" font-weight="800" font-size="26" fill="#2D49C8" stroke="#fff" stroke-width="1">Z</text></symbol>
+<symbol id="a_q_disco" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/><use href="#facehappy"/>
+  <path d="M26 50 C24 30 76 30 74 50" fill="none" stroke="#2A1A06" stroke-width="7" stroke-linecap="round"/>
+  <rect x="18" y="44" width="13" height="18" rx="6" fill="#2A1A06"/><rect x="69" y="44" width="13" height="18" rx="6" fill="#2A1A06"/></symbol>
+<symbol id="a_q_star" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <path d="M40 41 l3.5 7 8-1.2-5.7 5.7 2.7 7.5-8.5-4-8.5 4 2.7-7.5-5.7-5.7 8 1.2z" fill="#FFC83D" stroke="#2A1A06" stroke-width="3.5" stroke-linejoin="round" transform="translate(0,2) scale(.92)"/>
+  <path d="M40 41 l3.5 7 8-1.2-5.7 5.7 2.7 7.5-8.5-4-8.5 4 2.7-7.5-5.7-5.7 8 1.2z" fill="#FFC83D" stroke="#2A1A06" stroke-width="3.5" stroke-linejoin="round" transform="translate(24,2) scale(.92)"/>
+  <path d="M44 70 Q50 75 56 70" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_love" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <path d="M40 44 c-4-6-13-3-12 4 .7 5 7 9 12 12 5-3 11.3-7 12-12 1-7-8-10-12-4z" fill="#F05B5B" stroke="#2A1A06" stroke-width="3.5" transform="scale(.7) translate(14,22)"/>
+  <path d="M40 44 c-4-6-13-3-12 4 .7 5 7 9 12 12 5-3 11.3-7 12-12 1-7-8-10-12-4z" fill="#F05B5B" stroke="#2A1A06" stroke-width="3.5" transform="scale(.7) translate(46,22)"/>
+  <path d="M42 66 Q50 72 58 66" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_money" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <text x="32" y="58" font-family="Baloo 2,system-ui" font-weight="800" font-size="24" fill="#2E8B2E" stroke="#2A1A06" stroke-width="1.5">$</text>
+  <text x="54" y="58" font-family="Baloo 2,system-ui" font-weight="800" font-size="24" fill="#2E8B2E" stroke="#2A1A06" stroke-width="1.5">$</text>
+  <path d="M42 67 Q50 73 58 67" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_angel" viewBox="0 0 100 100"><use href="#beebase"/>
+  <ellipse cx="50" cy="12" rx="18" ry="6" fill="none" stroke="#FFC83D" stroke-width="6"/>
+  <use href="#facehappy"/></symbol>
+<symbol id="a_q_cool" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <path d="M28 46 h44 v4 h-5 c0 8-5 12-11 12 s-11-4-11-12 h-+0" fill="none"/>
+  <rect x="30" y="44" width="18" height="13" rx="6" fill="#2A1A06"/><rect x="52" y="44" width="18" height="13" rx="6" fill="#2A1A06"/>
+  <path d="M48 48 h4 M26 47 h6 M68 47 h6" stroke="#2A1A06" stroke-width="4"/>
+  <path d="M43 66 Q50 71 57 66" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_stache" viewBox="0 0 100 100"><use href="#beebase"/><use href="#crown"/>
+  <circle cx="40" cy="48" r="4.5" fill="#2A1A06"/><circle cx="60" cy="48" r="4.5" fill="#2A1A06"/>
+  <path d="M50 60 c-4-6-14-5-14 1 0 4 6 6 14 3 8 3 14 1 14-3 0-6-10-7-14-1z" fill="#2A1A06"/></symbol>
+<symbol id="a_q_zombee" viewBox="0 0 100 100"><use href="#beebase"/>
+  <path d="M50 17 C73 17 89 34 89 56 C89 76 74 91 50 98 C26 91 11 76 11 56 C11 34 27 17 50 17 Z" fill="#9CCB76" opacity=".55"/>
+  <use href="#crown"/>
+  <path d="M35 45 l9 9 M44 45 l-9 9" stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="60" cy="50" r="4.5" fill="#2A1A06"/>
+  <path d="M40 66 Q50 60 60 66" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_q_cowboy" viewBox="0 0 100 100"><use href="#beebase"/>
+  <path d="M22 26 Q24 20 32 20 L36 8 Q50 2 64 8 L68 20 Q76 20 78 26 Q64 34 50 34 Q36 34 22 26 Z" fill="#D9B98C" stroke="#2A1A06" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M44 14 l6-3 6 3-6 3z" fill="#FFC83D" stroke="#2A1A06" stroke-width="2"/>
+  <circle cx="40" cy="52" r="4.5" fill="#2A1A06"/><circle cx="60" cy="52" r="4.5" fill="#2A1A06"/>
+  <path d="M42 64 Q50 70 58 64" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+
+<!-- WORKERS (badged) -->
+<symbol id="a_w_forager" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <circle cx="79" cy="74" r="11" fill="#FF8AC2" stroke="#2A1A06" stroke-width="3.5"/><circle cx="79" cy="74" r="4" fill="#FFD23E" stroke="#2A1A06" stroke-width="2.5"/></symbol>
+<symbol id="a_w_nurse" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <circle cx="79" cy="74" r="11" fill="#fff" stroke="#2A1A06" stroke-width="3.5"/><path d="M79 68 v12 M73 74 h12" stroke="#F05B5B" stroke-width="4" stroke-linecap="round"/></symbol>
+<symbol id="a_w_guard" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <path d="M79 62 l10 4 v8 c0 7-5 10-10 12 -5-2-10-5-10-12 v-8 z" fill="#4FB7F0" stroke="#2A1A06" stroke-width="3.5" stroke-linejoin="round"/></symbol>
+<symbol id="a_w_scout" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <circle cx="72" cy="74" r="8" fill="#9FD8EA" stroke="#2A1A06" stroke-width="3.5"/><circle cx="87" cy="74" r="8" fill="#9FD8EA" stroke="#2A1A06" stroke-width="3.5"/><path d="M80 74 h-1" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<symbol id="a_w_under" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <path d="M70 86 L86 62" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/><path d="M64 90 l12 -8 6 8 c-6 5-14 5-18 0z" fill="#FFD23E" stroke="#2A1A06" stroke-width="3"/></symbol>
+<symbol id="a_w_builder" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/>
+  <path d="M72 88 L84 70" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/><rect x="76" y="58" width="18" height="11" rx="3" fill="#9FB6C9" stroke="#2A1A06" stroke-width="3.5" transform="rotate(20 85 63)"/></symbol>
+
+<symbol id="a_w_drone" viewBox="0 0 100 100"><use href="#beebase"/>
+ <path d="M34 48 q6 5 12 0 M54 48 q6 5 12 0" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+ <path d="M42 64 q8 4 16 0" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+ <rect x="64" y="66" width="16" height="20" rx="5" fill="#9FD8EA" stroke="#2A1A06" stroke-width="3.5"/><path d="M68 66 l4 -8 6 2 -4 8" fill="none" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<!-- HIVE (Bee King's skep-box style) -->
+<symbol id="a_hive" viewBox="0 0 100 100">
+  <rect x="30" y="84" width="8" height="14" fill="#8A5A2B" stroke="#2A1A06" stroke-width="3.5"/>
+  <rect x="62" y="84" width="8" height="14" fill="#8A5A2B" stroke="#2A1A06" stroke-width="3.5"/>
+  <rect x="20" y="78" width="60" height="9" rx="3" fill="#A8713A" stroke="#2A1A06" stroke-width="3.5"/>
+  <path d="M26 62 h48 l-3 17 h-42 z" fill="#B5803F" stroke="#2A1A06" stroke-width="3.5"/>
+  <path d="M24 46 h52 l-2 16 h-48 z" fill="#A8713A" stroke="#2A1A06" stroke-width="3.5"/>
+  <path d="M28 32 h44 l2 14 h-48 z" fill="#B5803F" stroke="#2A1A06" stroke-width="3.5"/>
+  <path d="M14 32 L50 12 L86 32 L80 38 L50 22 L20 38 Z" fill="#8A5A2B" stroke="#2A1A06" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M44 79 a6 6 0 0 1 12 0 z" fill="#2A1A06"/>
+  <rect x="38" y="52" width="24" height="4" rx="2" fill="#D9D9D9" stroke="#2A1A06" stroke-width="2.5"/>
+</symbol>
+<!-- hive badges -->
+<symbol id="hb_haunted" viewBox="0 0 100 100"><path d="M50 14 C30 14 22 30 22 48 V82 l9-7 9 7 10-7 10 7 9-7 9 7 V48 C78 30 70 14 50 14z" fill="#fff" stroke="#2A1A06" stroke-width="5"/><circle cx="40" cy="44" r="5" fill="#2A1A06"/><circle cx="60" cy="44" r="5" fill="#2A1A06"/><ellipse cx="50" cy="60" rx="6" ry="8" fill="#2A1A06"/></symbol>
+<symbol id="hb_disco" viewBox="0 0 100 100"><circle cx="50" cy="52" r="32" fill="#C9DFF2" stroke="#2A1A06" stroke-width="5"/><path d="M20 44 h60 M20 60 h60 M38 22 v60 M62 22 v60" stroke="#2A1A06" stroke-width="3.5"/><rect x="44" y="8" width="12" height="10" fill="#9FB6C9" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<symbol id="hb_dreams" viewBox="0 0 100 100"><path d="M64 16 A38 38 0 1 0 88 64 A30 30 0 0 1 64 16z" fill="#FFE27A" stroke="#2A1A06" stroke-width="5"/></symbol>
+<symbol id="hb_moon" viewBox="0 0 100 100"><path d="M42 70 L50 14 L58 70 C58 76 42 76 42 70z" fill="#E9F2F6" stroke="#2A1A06" stroke-width="5"/><path d="M42 70 q8 6 16 0 l6 16 h-28 z" fill="#F05B5B" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/><circle cx="50" cy="38" r="6" fill="#4FB7F0" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<symbol id="hb_love" viewBox="0 0 100 100"><path d="M50 34 c-10-16-34-8-31 10 2 13 18 24 31 33 13-9 29-20 31-33 3-18-21-26-31-10z" fill="#F05B5B" stroke="#2A1A06" stroke-width="5"/></symbol>
+<symbol id="hb_fort" viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="#FFD23E" stroke="#2A1A06" stroke-width="5"/><path d="M50 28 L31 39 v22 L50 72 L69 61 V39 Z" fill="none" stroke="#A85F00" stroke-width="5"/></symbol>
+<symbol id="hb_buzz" viewBox="0 0 100 100"><path d="M56 10 L30 56 h16 L42 90 L72 42 H54 Z" fill="#FFD23E" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/></symbol>
+<symbol id="hb_bless" viewBox="0 0 100 100"><path d="M50 10 L58 40 L88 50 L58 60 L50 90 L42 60 L12 50 L42 40 Z" fill="#FFF1B8" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/></symbol>
+<symbol id="hb_chill" viewBox="0 0 100 100"><rect x="22" y="22" width="56" height="56" rx="10" fill="#BFEFFF" stroke="#2A1A06" stroke-width="5"/><path d="M34 40 q8 8 0 20 M50 36 q8 10 0 28 M66 40 q8 8 0 20" stroke="#7ED3F2" stroke-width="5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="hb_club" viewBox="0 0 100 100"><rect x="30" y="20" width="40" height="36" rx="6" fill="#2A1A06"/><rect x="18" y="52" width="64" height="12" rx="6" fill="#2A1A06"/><rect x="30" y="40" width="40" height="8" fill="#7A4E1D"/></symbol>
+<symbol id="hb_star" viewBox="0 0 100 100"><path d="M50 8 L60 38 L92 38 L66 56 L76 88 L50 68 L24 88 L34 56 L8 38 L40 38 Z" fill="#FFC83D" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/></symbol>
+
+<!-- FLORA -->
+<symbol id="a_f_wild" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="4"><circle cx="50" cy="34" r="11" fill="#FF8AC2"/><circle cx="33" cy="46" r="11" fill="#FF8AC2"/><circle cx="67" cy="46" r="11" fill="#FF8AC2"/><circle cx="39" cy="62" r="11" fill="#FF8AC2"/><circle cx="61" cy="62" r="11" fill="#FF8AC2"/><circle cx="50" cy="50" r="9" fill="#FFD23E"/><path d="M50 70 v20 M50 80 q-12 -2 -16 6 M50 80 q12 -2 16 6" fill="none" stroke="#3A9E3A" stroke-width="5"/></g></symbol>
+<symbol id="a_f_clover" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="4"><circle cx="50" cy="36" r="13" fill="#7BD37B"/><circle cx="36" cy="52" r="13" fill="#5BC85B"/><circle cx="64" cy="52" r="13" fill="#5BC85B"/><path d="M50 60 v28" stroke="#3A9E3A" stroke-width="5"/></g></symbol>
+<symbol id="a_f_orange" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="4"><circle cx="50" cy="34" r="10" fill="#fff"/><circle cx="34" cy="45" r="10" fill="#fff"/><circle cx="66" cy="45" r="10" fill="#fff"/><circle cx="40" cy="60" r="10" fill="#fff"/><circle cx="60" cy="60" r="10" fill="#fff"/><circle cx="50" cy="48" r="9" fill="#FF9A3D"/><path d="M50 68 v20" stroke="#3A9E3A" stroke-width="5"/></g></symbol>
+<symbol id="a_f_buck" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="4"><circle cx="42" cy="36" r="8" fill="#FFF1E0"/><circle cx="58" cy="36" r="8" fill="#FFF1E0"/><circle cx="34" cy="50" r="8" fill="#FFF1E0"/><circle cx="50" cy="48" r="8" fill="#FFF1E0"/><circle cx="66" cy="50" r="8" fill="#FFF1E0"/><path d="M50 56 v32 M50 70 q-12 -4 -18 2 M50 70 q12 -4 18 2" fill="none" stroke="#3A9E3A" stroke-width="5"/></g></symbol>
+<symbol id="a_f_poplar" viewBox="0 0 100 100"><path d="M30 50 C30 30 40 24 50 18 C60 24 70 30 70 50 C70 64 60 70 50 70 C40 70 30 64 30 50z" fill="#FFD23E" stroke="#2A1A06" stroke-width="4"/><path d="M50 20 v-8 M50 70 v20" stroke="#3A9E3A" stroke-width="5"/><circle cx="50" cy="48" r="7" fill="#FF9A3D" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<symbol id="a_f_mesquite" viewBox="0 0 100 100"><ellipse cx="50" cy="44" rx="14" ry="30" fill="#F2E8B8" stroke="#2A1A06" stroke-width="4" transform="rotate(18 50 44)"/><g fill="#E0D08A"><circle cx="44" cy="28" r="3"/><circle cx="54" cy="36" r="3"/><circle cx="46" cy="46" r="3"/><circle cx="56" cy="54" r="3"/><circle cx="48" cy="62" r="3"/></g><path d="M58 70 q-16 8 -28 4" stroke="#3A9E3A" stroke-width="5" fill="none"/></symbol>
+<symbol id="a_f_bluebonnet" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="3.5"><ellipse cx="50" cy="20" rx="6" ry="8" fill="#FFF"/><ellipse cx="42" cy="32" rx="7" ry="8" fill="#3D6BD8"/><ellipse cx="58" cy="32" rx="7" ry="8" fill="#3D6BD8"/><ellipse cx="40" cy="46" rx="8" ry="9" fill="#3457B8"/><ellipse cx="60" cy="46" rx="8" ry="9" fill="#3457B8"/><ellipse cx="42" cy="60" rx="8" ry="9" fill="#3D6BD8"/><ellipse cx="58" cy="60" rx="8" ry="9" fill="#3D6BD8"/></g><path d="M50 66 v24" stroke="#3A9E3A" stroke-width="5"/></symbol>
+
+<!-- GEAR -->
+<symbol id="a_g_smoker" viewBox="0 0 100 100"><rect x="34" y="34" width="28" height="44" rx="6" fill="#C9D4DC" stroke="#2A1A06" stroke-width="4.5"/><path d="M40 34 L50 16 L60 34" fill="#C9D4DC" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/><path d="M62 50 h12 l6 14 h-12 z" fill="#A8713A" stroke="#2A1A06" stroke-width="4.5"/><circle cx="44" cy="14" r="7" fill="#fff" opacity=".9"/><circle cx="54" cy="8" r="5" fill="#fff" opacity=".8"/></symbol>
+<symbol id="a_c_losttool" viewBox="0 0 100 100"><g opacity=".85"><use href="#a_g_tool"/></g><path d="M22 22 L78 78 M78 22 L22 78" stroke="#E03A3A" stroke-width="9" stroke-linecap="round"/></symbol>
+<symbol id="a_c_mites" viewBox="0 0 100 100"><path d="M50 8 L92 84 H8z" fill="#FFD23E" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/><g transform="translate(28,34) scale(.45)"><use href="#a_mite"/></g></symbol>
+<symbol id="a_c_hornet" viewBox="0 0 100 100"><path d="M50 8 L92 84 H8z" fill="#F0872B" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/><g transform="translate(28,34) scale(.45)"><use href="#a_hornet"/></g></symbol>
+<symbol id="a_c_windfall" viewBox="0 0 100 100"><g transform="translate(14,14) scale(.72)"><use href="#a_jar"/></g><g transform="translate(56,8) scale(.4)"><use href="#a_coin"/></g><g transform="translate(66,46) scale(.34)"><use href="#a_coin"/></g></symbol>
+<symbol id="a_g_kit" viewBox="0 0 100 100"><rect x="16" y="40" width="68" height="38" rx="8" fill="#A8713A" stroke="#2A1A06" stroke-width="4.5"/><path d="M22 40 L30 26 h40 l8 14z" fill="#C98A4B" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/><path d="M42 26 v-6 a8 8 0 0 1 16 0 v6" fill="none" stroke="#2A1A06" stroke-width="4.5"/><rect x="42" y="50" width="16" height="14" rx="3" fill="#FFD23E" stroke="#2A1A06" stroke-width="4"/><circle cx="50" cy="57" r="2.5" fill="#2A1A06"/></symbol>
+<symbol id="a_g_spa" viewBox="0 0 100 100"><path d="M22 56 h56 q0 26 -28 26 q-28 0 -28 -26z" fill="#8FD6FF" stroke="#2A1A06" stroke-width="4.5"/><path d="M22 56 q14 8 28 0 q14 -8 28 0" fill="none" stroke="#2A1A06" stroke-width="4.5"/><path d="M38 44 q-6 -8 0 -16 q6 -8 0 -14" fill="none" stroke="#9FB6C9" stroke-width="5" stroke-linecap="round"/><path d="M62 44 q6 -8 0 -16 q-6 -8 0 -14" fill="none" stroke="#9FB6C9" stroke-width="5" stroke-linecap="round"/></symbol>
+<symbol id="a_g_press" viewBox="0 0 100 100"><rect x="24" y="64" width="52" height="14" rx="5" fill="#A8713A" stroke="#2A1A06" stroke-width="4.5"/><rect x="28" y="38" width="44" height="14" rx="5" fill="#C98A4B" stroke="#2A1A06" stroke-width="4.5"/><rect x="46" y="20" width="8" height="20" fill="#9FB6C9" stroke="#2A1A06" stroke-width="4"/><rect x="30" y="12" width="40" height="9" rx="4" fill="#A8713A" stroke="#2A1A06" stroke-width="4"/><path d="M50 52 q-4 7 0 10 q4 -3 0 -10z" fill="#FFB42B" stroke="#2A1A06" stroke-width="3"/></symbol>
+<symbol id="a_g_gold" viewBox="0 0 100 100"><rect x="34" y="34" width="28" height="44" rx="6" fill="#FFD23E" stroke="#2A1A06" stroke-width="4.5"/><path d="M40 34 L50 16 L60 34" fill="#FFD23E" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/><path d="M62 50 h12 l6 14 h-12 z" fill="#E08700" stroke="#2A1A06" stroke-width="4.5"/><circle cx="44" cy="14" r="7" fill="#fff" opacity=".9"/><path d="M44 52 l4 8 8-2-5 7 3 8-9-4-9 4 3-8-5-7 8 2z" fill="#fff" opacity=".85"/></symbol>
+<symbol id="a_g_tool" viewBox="0 0 100 100"><path d="M26 78 L66 30 q6-6 12 0 t0 12 L60 60 l8 8 -10 10 -8-8 z" fill="#FFC83D" stroke="#2A1A06" stroke-width="4.5" stroke-linejoin="round"/></symbol>
+<symbol id="a_g_brush" viewBox="0 0 100 100"><rect x="44" y="14" width="12" height="38" rx="6" fill="#A8713A" stroke="#2A1A06" stroke-width="4.5"/><path d="M34 52 h32 v12 c0 14-8 22-16 22 s-16-8-16-22z" fill="#FFE6A8" stroke="#2A1A06" stroke-width="4.5"/><path d="M42 60 v18 M50 62 v20 M58 60 v18" stroke="#D9B05A" stroke-width="3.5"/></symbol>
+<symbol id="a_g_excl" viewBox="0 0 100 100"><rect x="18" y="30" width="64" height="40" rx="8" fill="#FFE6A8" stroke="#2A1A06" stroke-width="4.5"/><path d="M30 30 v40 M42 30 v40 M54 30 v40 M66 30 v40" stroke="#2A1A06" stroke-width="3.5"/></symbol>
+<symbol id="a_g_pollen" viewBox="0 0 100 100"><g stroke="#2A1A06" stroke-width="4"><circle cx="40" cy="42" r="12" fill="#FFD23E"/><circle cx="60" cy="38" r="9" fill="#FFC83D"/><circle cx="56" cy="58" r="11" fill="#FFB42B"/><circle cx="38" cy="62" r="8" fill="#FFC83D"/></g></symbol>
+<symbol id="a_g_screen" viewBox="0 0 100 100"><rect x="18" y="30" width="64" height="40" rx="8" fill="#fff" stroke="#2A1A06" stroke-width="4.5"/><path d="M26 36 l48 28 M38 32 l36 22 M26 50 l32 18 M50 32 l24 14 M26 62 l14 8" stroke="#9FB6C9" stroke-width="3"/></symbol>
+<symbol id="a_g_suit" viewBox="0 0 100 100"><circle cx="50" cy="28" r="16" fill="#E9F2F6" stroke="#2A1A06" stroke-width="4.5"/><path d="M40 22 a14 12 0 0 1 20 0" fill="none" stroke="#2A1A06" stroke-width="3.5"/><path d="M34 44 h32 l6 36 h-44 z" fill="#fff" stroke="#2A1A06" stroke-width="4.5"/><path d="M50 44 v36" stroke="#2A1A06" stroke-width="3"/></symbol>
+
+<!-- SECRETS -->
+<symbol id="a_s_robee" viewBox="0 0 100 100"><use href="#beebase"/><path d="M50 17 C73 17 89 34 89 56 C89 76 74 91 50 98 C26 91 11 76 11 56 C11 34 27 17 50 17 Z" fill="#C9D4DC" opacity=".5"/><rect x="32" y="42" width="36" height="16" rx="8" fill="#2A1A06"/><circle cx="42" cy="50" r="4" fill="#4FB7F0"/><circle cx="58" cy="50" r="4" fill="#4FB7F0"/><path d="M50 22 v-10" stroke="#2A1A06" stroke-width="4"/><circle cx="50" cy="9" r="4" fill="#F05B5B" stroke="#2A1A06" stroke-width="3"/><path d="M40 68 h20" stroke="#2A1A06" stroke-width="4" stroke-linecap="round"/></symbol>
+<symbol id="a_s_grumble" viewBox="0 0 100 100"><use href="#beebase"/><path d="M32 42 l14 6 M68 42 l-14 6" stroke="#2A1A06" stroke-width="5" stroke-linecap="round"/><circle cx="40" cy="53" r="4.5" fill="#2A1A06"/><circle cx="60" cy="53" r="4.5" fill="#2A1A06"/><path d="M42 68 Q50 63 58 68" stroke="#2A1A06" stroke-width="4.5" fill="none" stroke-linecap="round"/></symbol>
+<symbol id="a_s_kingbee" viewBox="0 0 100 100"><use href="#beebase"/><path d="M28 20 L34 2 L44 12 L50 0 L56 12 L66 2 L72 20 Z" fill="#FFD23E" stroke="#2A1A06" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="8" r="3" fill="#F05B5B"/><use href="#facehappy"/></symbol>
+<symbol id="a_s_slugger" viewBox="0 0 100 100"><use href="#beebase"/><path d="M30 26 a20 15 0 0 1 40 0 l0 5 -40 0 z" fill="#1A3A8F" stroke="#2A1A06" stroke-width="4" stroke-linejoin="round"/><path d="M68 26 h17 a4 4.5 0 0 1 0 9 h-17 z" fill="#1A3A8F" stroke="#2A1A06" stroke-width="4" stroke-linejoin="round"/><circle cx="50" cy="20" r="3" fill="#F05B5B" stroke="#2A1A06" stroke-width="2.5"/><use href="#facehappy"/><g transform="rotate(-32 18 70)"><rect x="13" y="44" width="10" height="44" rx="5" fill="#C98E5A" stroke="#2A1A06" stroke-width="4"/><rect x="14.5" y="82" width="7" height="7" rx="3" fill="#8A5A33" stroke="#2A1A06" stroke-width="3"/></g></symbol>
+
+<!-- THREATS -->
+<symbol id="a_beefly" viewBox="0 0 100 100"><use href="#beebase"/><use href="#facehappy"/></symbol>
+<symbol id="a_mite" viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="26" ry="20" fill="#C0392B" stroke="#2A1A06" stroke-width="5"/><g stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"><path d="M28 44 L14 34 M28 56 L12 56 M30 66 L16 76 M72 44 L86 34 M72 56 L88 56 M70 66 L84 76"/></g><circle cx="42" cy="50" r="3.5" fill="#2A1A06"/><circle cx="58" cy="50" r="3.5" fill="#2A1A06"/></symbol>
+<symbol id="a_hornet" viewBox="0 0 100 100"><ellipse cx="20" cy="38" rx="16" ry="10" fill="#C9D4DC" stroke="#2A1A06" stroke-width="4.5" transform="rotate(-20 20 38)"/><ellipse cx="80" cy="38" rx="16" ry="10" fill="#C9D4DC" stroke="#2A1A06" stroke-width="4.5" transform="rotate(20 80 38)"/><path d="M50 94 C28 88 18 72 18 54 C18 32 32 18 50 18 C68 18 82 32 82 54 C82 72 72 88 50 94z" fill="#FFD23E" stroke="#2A1A06" stroke-width="5"/><path d="M44 18 L34 4 M56 18 L66 4" stroke="#2A1A06" stroke-width="5" stroke-linecap="round"/><path d="M46 18 L50 30 L54 18 Z" fill="#2A1A06"/><path d="M30 42 l14 8 M70 42 l-14 8" stroke="#2A1A06" stroke-width="0"/><path d="M30 40 L46 50 L42 54 L28 46 Z" fill="#C0392B" stroke="#2A1A06" stroke-width="3"/><path d="M70 40 L54 50 L58 54 L72 46 Z" fill="#C0392B" stroke="#2A1A06" stroke-width="3"/><path d="M40 66 q10 -8 20 0 l-4 6 q-6 -4 -12 0 z" fill="#C0392B" stroke="#2A1A06" stroke-width="3"/><path d="M22 60 q28 14 56 0 l-4 10 q-24 10 -48 0 z" fill="#2A1A06"/></symbol>
+
+<symbol id="a_moth" viewBox="0 0 100 100"><path d="M48 50 C20 30 8 44 16 60 C22 72 38 70 48 58z" fill="#CDB8E8" stroke="#2A1A06" stroke-width="4.5"/><path d="M52 50 C80 30 92 44 84 60 C78 72 62 70 52 58z" fill="#CDB8E8" stroke="#2A1A06" stroke-width="4.5"/><path d="M48 62 C30 78 22 90 30 94 C36 97 46 86 50 72z" fill="#B9A0DC" stroke="#2A1A06" stroke-width="4"/><path d="M52 62 C70 78 78 90 70 94 C64 97 54 86 50 72z" fill="#B9A0DC" stroke="#2A1A06" stroke-width="4"/><ellipse cx="50" cy="56" rx="8" ry="20" fill="#8A6FAE" stroke="#2A1A06" stroke-width="4.5"/><path d="M46 38 L40 26 M54 38 L60 26" stroke="#2A1A06" stroke-width="4" stroke-linecap="round"/></symbol>
+<symbol id="a_bear" viewBox="0 0 100 100"><circle cx="26" cy="26" r="13" fill="#8A5A2B" stroke="#2A1A06" stroke-width="5"/><circle cx="74" cy="26" r="13" fill="#8A5A2B" stroke="#2A1A06" stroke-width="5"/><circle cx="26" cy="26" r="5" fill="#C49066"/><circle cx="74" cy="26" r="5" fill="#C49066"/><circle cx="50" cy="54" r="34" fill="#A8713A" stroke="#2A1A06" stroke-width="5"/><ellipse cx="50" cy="66" rx="16" ry="12" fill="#E8C9A0" stroke="#2A1A06" stroke-width="4"/><ellipse cx="50" cy="60" rx="6" ry="4.5" fill="#2A1A06"/><path d="M50 64 v5 M50 69 q-5 4 -9 1 M50 69 q5 4 9 1" stroke="#2A1A06" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M34 44 l8 4 M66 44 l-8 4" stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"/><circle cx="38" cy="50" r="3.5" fill="#2A1A06"/><circle cx="62" cy="50" r="3.5" fill="#2A1A06"/></symbol>
+<symbol id="a_beetle" viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="22" ry="28" fill="#3A4A58" stroke="#2A1A06" stroke-width="5"/><path d="M50 32 v52" stroke="#2A1A06" stroke-width="4"/><circle cx="50" cy="28" r="11" fill="#5A7184" stroke="#2A1A06" stroke-width="5"/><path d="M44 20 L36 10 M56 20 L64 10" stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"/><g stroke="#2A1A06" stroke-width="4.5" stroke-linecap="round"><path d="M30 46 L16 40 M30 60 L14 60 M32 72 L18 82 M70 46 L84 40 M70 60 L86 60 M68 72 L82 82"/></g></symbol>
+<!-- CURRENCY / UI -->
+<symbol id="a_coin" viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#FFD23E" stroke="#2A1A06" stroke-width="5"/><circle cx="50" cy="50" r="28" fill="#FFC83D" stroke="#E08700" stroke-width="4"/><path d="M50 30 L67 40 V60 L50 70 L33 60 V40 Z" fill="none" stroke="#A85F00" stroke-width="5"/></symbol>
+<symbol id="a_jar" viewBox="0 0 100 100"><rect x="30" y="14" width="40" height="12" rx="4" fill="#C9D4DC" stroke="#2A1A06" stroke-width="4.5"/><path d="M30 28 h40 q6 14 6 30 q0 26 -26 26 q-26 0 -26 -26 q0 -16 6 -30z" fill="#FFB42B" stroke="#2A1A06" stroke-width="4.5"/><path d="M36 40 q14 8 28 0 v8 q-14 8 -28 0z" fill="#FFD23E"/><image href="data:image/png;base64,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" x="37" y="46" width="26" height="26"/></symbol>
+<symbol id="a_jelly" viewBox="0 0 100 100"><path d="M18 36 L30 12 L44 26 L50 6 L56 26 L70 12 L82 36 L76 78 q-26 12 -52 0 Z" fill="#C49AF2" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/><circle cx="38" cy="52" r="5" fill="#fff" opacity=".7"/><circle cx="58" cy="60" r="4" fill="#fff" opacity=".6"/></symbol>
+<symbol id="a_sab" viewBox="0 0 100 100"><path d="M50 30 c-10-16-34-8-31 10 2 13 18 24 31 33 13-9 29-20 31-33 3-18-21-26-31-10z" fill="#FF8AC2" stroke="#2A1A06" stroke-width="5"/><g transform="translate(28,30) scale(.45)"><use href="#beebase"/><use href="#facehappy"/></g></symbol>
+<symbol id="a_pack" viewBox="0 0 100 100"><rect x="22" y="10" width="56" height="80" rx="10" fill="#FFB42B" stroke="#2A1A06" stroke-width="5"/><path d="M22 26 h56 M22 74 h56" stroke="#E08700" stroke-width="4"/><g transform="translate(28,26) scale(.45)"><use href="#beebase"/><use href="#facehappy"/></g><path d="M30 16 l4 4 M66 16 l4 4" stroke="#fff" stroke-width="3" opacity=".7"/></symbol>
+<!-- nav icons -->
+<symbol id="n_hive" viewBox="0 0 100 100"><use href="#a_hive"/></symbol>
+<symbol id="n_cards" viewBox="0 0 100 100"><rect x="20" y="24" width="44" height="60" rx="8" fill="#fff" stroke="#2A1A06" stroke-width="6" transform="rotate(-8 42 54)"/><rect x="38" y="20" width="44" height="60" rx="8" fill="#FFD23E" stroke="#2A1A06" stroke-width="6" transform="rotate(7 60 50)"/></symbol>
+<symbol id="n_shop" viewBox="0 0 100 100"><path d="M24 38 h52 l-6 46 h-40 z" fill="#FF8AC2" stroke="#2A1A06" stroke-width="6" stroke-linejoin="round"/><path d="M36 38 a14 14 0 0 1 28 0" fill="none" stroke="#2A1A06" stroke-width="6"/></symbol>
+<symbol id="n_market" viewBox="0 0 100 100"><path d="M18 78 L40 52 L56 64 L82 28" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M82 28 l-2 18 M82 28 l-18 2" stroke="#2A1A06" stroke-width="8" stroke-linecap="round"/></symbol>
+<symbol id="n_hub" viewBox="0 0 100 100"><path d="M20 38 h44 l-10 -12 M80 62 h-44 l10 12" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="n_note" viewBox="0 0 100 100"><path d="M38 78 V26 L76 16 V66" fill="none" stroke="#2A1A06" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="28" cy="78" rx="12" ry="9" fill="#2A1A06"/><ellipse cx="66" cy="68" rx="12" ry="9" fill="#2A1A06"/></symbol>
+<symbol id="n_book" viewBox="0 0 100 100"><path d="M50 26 C40 18 26 18 18 24 V78 c8-6 22-6 32 2 10-8 24-8 32-2 V24 c-8-6-22-6-32 2z" fill="#9FD8EA" stroke="#2A1A06" stroke-width="6" stroke-linejoin="round"/><path d="M50 28 v50" stroke="#2A1A06" stroke-width="5"/></symbol>
+</defs>
+</svg></div>
+<div id="phone">
+
+<div class="board">
+  <div class="sky"></div><div class="cloud" style="top:9%;left:14%;width:70px;height:24px;"></div>
+    <div class="cloud" style="top:16%;left:64%;width:90px;height:28px;"></div>
+    <div class="cloud" style="top:26%;left:34%;width:60px;height:20px;opacity:.7;"></div>
+  <div class="hills"></div>
+  <div class="ground"></div>
+  <svg class="flora" style="left:6%;bottom:7%;width:44px;height:44px;" viewBox="0 0 100 100"><use href="#a_f_wild"/></svg>
+    <svg class="flora" style="left:78%;bottom:5%;width:40px;height:40px;" viewBox="0 0 100 100"><use href="#a_f_clover"/></svg>
+    <svg class="flora" style="left:30%;bottom:3%;width:38px;height:38px;" viewBox="0 0 100 100"><use href="#a_f_bluebonnet"/></svg>
+    <svg class="flora" style="left:60%;bottom:9%;width:42px;height:42px;" viewBox="0 0 100 100"><use href="#a_f_orange"/></svg>
+    <svg class="flora" style="left:46%;bottom:1%;width:36px;height:36px;" viewBox="0 0 100 100"><use href="#a_f_mesquite"/></svg>
+  <div class="hive" style="left:26%;top:48%;" onclick="openHive('hive_club')">
+          <span class="lvl">Lv 5</span>
+          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_club"/></svg>
+          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_money"/></svg>
+          <br><span class="nametag">Gentlebee Club</span>
+        </div><div class="hive" style="left:74%;top:44%;" onclick="openHive('hive_star')">
+          <span class="lvl">Lv 4</span>
+          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_star"/></svg>
+          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_star"/></svg>
+          <br><span class="nametag">Star Skep</span>
+        </div><div class="hive" style="left:40%;top:72%;" onclick="openHive('hive_love')">
+          <span class="lvl">Lv 3</span>
+          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_love"/></svg>
+          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_love"/></svg>
+          <br><span class="nametag">Lovebug Lodge</span>
+        </div><div class="hive" style="left:78%;top:72%;" onclick="openHive('hive_chill')">
+          <span class="lvl">Lv 2</span>
+          <svg class="hivesvg" viewBox="0 0 100 100"><use href="#a_hive"/></svg>
+          <svg class="badge" viewBox="0 0 100 100"><use href="#hb_chill"/></svg>
+          <svg class="qbubble" viewBox="0 0 100 100"><use href="#a_q_cool"/></svg>
+          <br><span class="nametag">Chillhive</span>
+        </div>
+  <div class="mini danger" style="left:11%;top:56%;" onclick="playMini('Robber Bees','a_s_grumble','A swarm is raiding! Tap-defend your honey.')">
+          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_s_grumble"/></svg></div>
+          <div class="timer" data-secs="272">4:32</div>
+        </div><div class="mini" style="left:90%;top:52%;" onclick="playMini('Honey Drop','a_jar','Catch falling jars before they spill.')">
+          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></div>
+          <div class="timer" data-secs="135">2:15</div>
+        </div><div class="mini cool" style="left:12%;top:78%;" onclick="playMini('Waggle Dance','a_q_disco','Match the dance to boost your rate.')">
+          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_q_disco"/></svg></div>
+          <div class="timer" data-secs="408">6:48</div>
+        </div><div class="mini danger" style="left:62%;top:80%;" onclick="playMini('Hornet Watch','a_hornet','Swat hornets before they reach the hive.')">
+          <div class="orb"><span class="ring"></span><svg viewBox="0 0 100 100"><use href="#a_hornet"/></svg></div>
+          <div class="timer" data-secs="67">1:07</div>
+        </div>
+</div>
+<div class="logo-wrap"><img src="logo-title.png" alt="BeeMoji"></div>
+<!-- top-corner goal pips -->
+<div style="position:absolute;top:12px;left:12px;z-index:28;display:flex;gap:6px;">
+  <div class="pip">
+          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
+          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg></span>
+          <span class="frac">8.4K</span>
+        </div>
+  <div class="pip">
+          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--honey)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="6.0"/></svg>
+          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg></span>
+          <span class="frac">2.2K</span>
+        </div>
+</div>
+<div style="position:absolute;top:12px;right:12px;z-index:28;display:flex;gap:6px;">
+  <div class="pip">
+          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--blue)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="75.4"/></svg>
+          <span class="ico"><svg viewBox="0 0 100 100"><use href="#n_market"/></svg></span>
+          <span class="frac">2/4</span>
+        </div>
+  <div class="pip">
+          <svg class="ring" viewBox="0 0 58 58"><circle cx="29" cy="29" r="24" fill="none" stroke="#E6D3A6" stroke-width="6"/>
+          <circle cx="29" cy="29" r="24" fill="none" stroke="var(--purple)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="0.0"/></svg>
+          <span class="ico"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg></span>
+          <span class="frac">x1.7</span>
+        </div>
+</div>
+<!-- player name tag -->
+<div style="position:absolute;top:158px;left:50%;transform:translateX(-50%);z-index:24;
+   background:var(--ink);color:#fff;border-radius:24px;padding:5px 16px;font-weight:800;font-size:13px;
+   box-shadow:0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;gap:7px;white-space:nowrap;">
+   <svg viewBox="0 0 100 100" style="width:22px;height:22px"><use href="#a_q_money"/></svg>
+   Bubba's Bees &middot; Lv 5 &middot; Mesquite Flats &middot; x1.7</div>
+<div class="hud" style="top:192px;left:50%;transform:translateX(-50%);">
+      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_coin"/></svg><b>960</b></div>
+      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg><b>200</b></div>
+      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_jelly"/></svg><b>3</b></div>
+      <div class="pill"><svg viewBox="0 0 100 100"><use href="#a_sab"/></svg><b>1.7K</b></div>
+    </div>
+<!-- big floating harvest button -->
+<button class="btn honey" style="position:absolute;bottom:96px;left:50%;transform:translateX(-50%);z-index:35;
+  font-size:20px;padding:16px 30px;border-radius:30px;display:flex;align-items:center;gap:10px;"
+  onclick="playMini('Harvest All','a_jar','Collected honey from all hives! +540 jars')">
+  <svg viewBox="0 0 100 100" style="width:34px;height:34px"><use href="#a_jar"/></svg> Harvest</button>
+<div class="scrim" id="hive_club" onclick="if(event.target===this)closeHive()">
+          <div class="popcard">
+            <button class="x" onclick="closeHive()">&times;</button>
+            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_club"/></svg>Gentlebee Club <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 5</span></h2>
+            <div class="popstats">
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>177/200</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>3.7/s</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>19 bees</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.5</span>
+            </div>
+            <div class="barwrap"><div class="lab"><span>Honey store</span><span>177/200</span></div><div class="bar"><i style="width:88%"></i></div></div>
+            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_money"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_forager"/></svg><span class="role">Forager</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_nurse"/></svg><span class="role">Nurse</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_guard"/></svg><span class="role">Guard</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_scout"/></svg><span class="role">Scout</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
+            <div style="margin-top:14px;display:flex;gap:10px;">
+              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 177 jars from Gentlebee Club!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+            </div>
+          </div>
+        </div><div class="scrim" id="hive_star" onclick="if(event.target===this)closeHive()">
+          <div class="popcard">
+            <button class="x" onclick="closeHive()">&times;</button>
+            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_star"/></svg>Star Skep <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 4</span></h2>
+            <div class="popstats">
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>88/150</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>2.1/s</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>11 bees</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.2</span>
+            </div>
+            <div class="barwrap"><div class="lab"><span>Honey store</span><span>88/150</span></div><div class="bar"><i style="width:58%"></i></div></div>
+            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_star"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_builder"/></svg><span class="role">Builder</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_drone"/></svg><span class="role">Drone</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
+            <div style="margin-top:14px;display:flex;gap:10px;">
+              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 88 jars from Star Skep!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+            </div>
+          </div>
+        </div><div class="scrim" id="hive_love" onclick="if(event.target===this)closeHive()">
+          <div class="popcard">
+            <button class="x" onclick="closeHive()">&times;</button>
+            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_love"/></svg>Lovebug Lodge <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 3</span></h2>
+            <div class="popstats">
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>40/120</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>1.4/s</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>6 bees</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
+            </div>
+            <div class="barwrap"><div class="lab"><span>Honey store</span><span>40/120</span></div><div class="bar"><i style="width:33%"></i></div></div>
+            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_love"/></svg><span class="role">Queen</span></div><div class="slot filled"><svg viewBox="0 0 100 100"><use href="#a_w_forager"/></svg><span class="role">Forager</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
+            <div style="margin-top:14px;display:flex;gap:10px;">
+              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 40 jars from Lovebug Lodge!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+            </div>
+          </div>
+        </div><div class="scrim" id="hive_chill" onclick="if(event.target===this)closeHive()">
+          <div class="popcard">
+            <button class="x" onclick="closeHive()">&times;</button>
+            <h2><svg viewBox="0 0 100 100" style="width:30px;height:30px"><use href="#hb_chill"/></svg>Chillhive <span style="font-size:13px;background:var(--honey);border:2.5px solid var(--ink);border-radius:20px;padding:1px 9px;">Lv 2</span></h2>
+            <div class="popstats">
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_jar"/></svg>12/80</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_pollen"/></svg>0.6/s</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_q_coffee"/></svg>3 bees</span>
+              <span class="stat"><svg viewBox="0 0 100 100"><use href="#a_g_gold"/></svg>x1.0</span>
+            </div>
+            <div class="barwrap"><div class="lab"><span>Honey store</span><span>12/80</span></div><div class="bar"><i style="width:15%"></i></div></div>
+            <div style="font-weight:800;color:var(--ink);margin-top:6px;font-size:14px;">Card slots</div>
+            <div class="slots"><div class="slot queen"><svg viewBox="0 0 100 100"><use href="#a_q_cool"/></svg><span class="role">Queen</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div><div class="slot"><span class="plus">+</span><span class="role">Empty</span></div></div>
+            <div style="margin-top:14px;display:flex;gap:10px;">
+              <button class="btn honey" style="flex:1" onclick="playMini('Collect Honey','a_jar','Harvested 12 jars from Chillhive!')"><svg viewBox="0 0 100 100" style="width:22px;height:22px;vertical-align:-5px"><use href="#a_jar"/></svg> Collect</button>
+              <button class="btn green" style="flex:1" onclick="closeHive()">Manage</button>
+            </div>
+          </div>
+        </div>
+<div class="toast" id="toast" onclick="event.stopPropagation()">
+      <h3 id="toast-h"></h3>
+      <p id="toast-p"></p>
+      <div class="row">
+        <button class="btn honey" onclick="closeToast()">Play</button>
+        <button class="btn green" onclick="closeToast()">Later</button>
+      </div>
+    </div>
+<nav class="nav"><button class="active"><svg viewBox="0 0 100 100"><use href="#n_hive"/></svg>Apiary</button><button><svg viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button><button><svg viewBox="0 0 100 100"><use href="#n_shop"/></svg>Shop</button><button><svg viewBox="0 0 100 100"><use href="#n_market"/></svg>Market</button><button><svg viewBox="0 0 100 100"><use href="#n_hub"/></svg>Hub</button><button><svg viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button></nav>
+
+</div>
+<script>
+function openHive(id){
+  document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));
+  var el=document.getElementById(id); if(el) el.classList.add('show');
+}
+function closeHive(){document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));}
+var toastT=null;
+function playMini(title,iconId,desc){
+  var t=document.getElementById('toast');
+  document.getElementById('toast-h').innerHTML='<svg viewBox="0 0 100 100"><use href="#'+iconId+'"/></svg>'+title;
+  document.getElementById('toast-p').textContent=desc;
+  t.classList.add('show');
+}
+function closeToast(){document.getElementById('toast').classList.remove('show');}
+// live countdown ticking so minigames "expire"
+window.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('[data-secs]').forEach(function(el){
+    var s=parseInt(el.getAttribute('data-secs'),10);
+    function tick(){
+      if(s<=0){el.textContent='0:00';el.closest('.mini')&&(el.closest('.mini').style.opacity=.35);return;}
+      var m=Math.floor(s/60),ss=String(s%60).padStart(2,'0');
+      el.textContent=m+':'+ss; s--; setTimeout(tick,1000);
+    }
+    tick();
+  });
+});
+</script>
+</body></html>
