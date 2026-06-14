@@ -123,7 +123,7 @@ header.gamehud .hudLabel{position:absolute;left:50%;bottom:-15px;transform:trans
 .hiveDetail.mockSheet .sheetActions .btn.honey{background:linear-gradient(180deg,#FFD85B,#F09A00);}
 @media(max-width:390px){.mbox:has(.hiveDetail){padding:20px 18px 24px}.hiveDetail.mockSheet .cardSlots{gap:10px}.hiveDetail.mockSheet .statPill{min-width:96px;font-size:15px}.hiveDetail.mockSheet h2{font-size:24px}.hiveDetail.mockSheet .sheetActions .btn{font-size:20px}}
 
-.goalStack{position:absolute;left:8px;top:8px;width:122px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:3;}
+.goalStack{display:none;position:absolute;left:8px;top:8px;width:122px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;z-index:3;}
 .goalrings{display:flex;gap:8px;align-items:flex-start;justify-content:flex-start;}
 .goalring{position:relative;width:58px;height:72px;text-align:center;font-family:'Baloo 2';font-size:9px;font-weight:900;color:var(--ink);}
 .goalring svg{width:58px;height:58px;display:block;overflow:visible;}
@@ -144,7 +144,7 @@ header.gamehud .hudLabel{position:absolute;left:50%;bottom:-15px;transform:trans
 #apiaryName{position:relative;margin-top:-12px;min-width:120px;max-width:178px;text-align:center;padding:5px 14px 6px;font-family:'Baloo 2';font-weight:800;font-size:13px;line-height:1;color:#fff;background:linear-gradient(180deg,#A8713A,#6C421D);border:2px solid #2A1A06;border-radius:999px;box-shadow:0 3px 0 rgba(42,26,6,.35);text-shadow:0 1px 0 rgba(0,0,0,.45);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #apiaryName::before,#apiaryName::after{content:"";position:absolute;top:-10px;width:2px;height:12px;background:#2A1A06;}
 #apiaryName::before{left:18px}#apiaryName::after{right:18px}
-#marketStandBtn{position:absolute;top:0;left:calc(50% + 82px);border:none;background:none;padding:0;filter:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0;width:58px;height:74px;}
+#marketStandBtn{display:none!important;position:absolute;top:0;left:calc(50% + 82px);border:none;background:none;padding:0;filter:none;cursor:pointer;flex-direction:column;align-items:center;gap:0;width:58px;height:74px;}
 #marketStandBtn svg{width:58px;height:58px;display:block;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff,#FFD23E 58%,#E08700 100%);border:4px solid #2A1A06;box-shadow:0 5px 0 rgba(42,26,6,.45),0 8px 13px rgba(0,0,0,.20);padding:7px;}
 #marketStandBtn::after{content:'Market';font-size:10px;font-weight:900;color:#2A1A06;background:#fff;border:2px solid #2A1A06;border-radius:999px;padding:0 7px;margin-top:-6px;line-height:16px;box-shadow:0 2px 0 rgba(0,0,0,.18);}
 .statchips.bankPanel{position:absolute;left:8px;top:82px;right:auto;z-index:4;}
@@ -359,6 +359,36 @@ input[type=text]:focus{border-color:var(--honey);}
 #bigHarvest .ic{width:50px;height:50px;}
 #bigHarvest.ready{animation:pulse 1.1s infinite;filter:drop-shadow(0 0 10px rgba(255,210,62,.85));}
 #bigHarvest:active{transform:translateY(3px);box-shadow:0 3px 0 #9c5e00,0 6px 12px rgba(0,0,0,.3);}
+
+
+/* ---------- Monopoly-style bottom dock + Bee menu ---------- */
+nav{min-height:92px;padding:12px 10px calc(8px + env(safe-area-inset-bottom));align-items:flex-end;justify-content:space-between;gap:4px;background:linear-gradient(180deg,#FFFDF6,#EFE3CC);border-top:4px solid #2A1A06;box-shadow:0 -8px 0 rgba(42,26,6,.18),0 -18px 35px rgba(0,0,0,.16);}
+nav::before{top:-50px;width:118px;height:118px;border:4px solid #2A1A06;background:linear-gradient(180deg,#FFFDF6,#EFE3CC);box-shadow:0 -8px 0 rgba(42,26,6,.18);}
+nav::after{top:-8px;width:138px;height:68px;background:linear-gradient(180deg,#FFFDF6,#EFE3CC);}
+nav button{flex:0 0 64px;min-width:0;height:64px;padding:6px 0 4px;border-radius:18px;font-size:10px;opacity:.9;background:#fff;border:3px solid #2A1A06;box-shadow:0 4px 0 rgba(42,26,6,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+nav button.on{opacity:1;background:linear-gradient(180deg,#FFF6C8,#FFD75B);}
+nav button.on::after{display:none;}
+nav button .nv{width:28px!important;height:28px!important;margin:0;}
+nav button.on .nv{transform:none;filter:none;}
+nav .dockGap{flex:0 0 92px;pointer-events:none;}
+#dockProgress{position:absolute;left:12px;right:12px;top:-24px;height:26px;background:#2D6CCB;border:4px solid #2A1A06;border-radius:999px;box-shadow:0 4px 0 rgba(42,26,6,.22);overflow:hidden;display:flex;align-items:center;justify-content:center;z-index:-2;}
+#dockProgress .dockFill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#55B7FF,#8EE5FF);border-radius:999px;transition:width .25s ease;}
+#dockProgress .dockText{position:relative;z-index:1;color:#fff;font-size:11px;font-weight:1000;text-shadow:0 2px 0 rgba(0,0,0,.35);}
+#actionDock{bottom:calc(30px + env(safe-area-inset-bottom));z-index:75;}
+#bigHarvest{width:92px;height:92px;border-width:6px;}
+#bigHarvest .ic{width:58px;height:58px;}
+#dockMenuBtn .hamb{width:30px;height:30px;display:block;}
+.menuOverlay{position:fixed;inset:0;background:rgba(12,8,4,.62);z-index:180;display:none;align-items:flex-start;justify-content:flex-end;max-width:520px;margin:0 auto;left:0;right:0;}
+.menuOverlay.on{display:flex;}
+.beeMenu{width:min(355px,82vw);height:calc(100dvh - 70px);margin-top:52px;margin-right:0;background:#FFFDF1;border:4px solid #2A1A06;border-right:0;border-radius:28px 0 0 28px;box-shadow:-8px 0 0 rgba(42,26,6,.18),-20px 0 42px rgba(0,0,0,.25);padding:22px 18px;position:relative;overflow-y:auto;}
+.beeMenu .profile{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 0 18px;}
+.beeMenu .avatar{width:78px;height:78px;border-radius:50%;border:4px solid #fff;box-shadow:0 0 0 4px #2A1A06,0 5px 10px rgba(0,0,0,.18);background:#9BE2FF;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.beeMenu .name{font-family:'Baloo 2';font-size:26px;font-weight:1000;margin-top:10px;color:#2A1A06;}
+.beeMenu .menuRow{width:100%;display:flex;align-items:center;gap:15px;padding:13px 6px;border:none;border-top:2px solid rgba(42,26,6,.15);background:transparent;color:#2A1A06;font-family:'Baloo 2';font-size:21px;font-weight:1000;text-align:left;cursor:pointer;}
+.beeMenu .menuRow svg,.beeMenu .menuRow .beespr{width:42px!important;height:42px!important;flex:none;}
+.beeMenu .menuClose{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;border:0;background:rgba(255,253,241,.88);font-size:38px;color:#8E7D65;font-weight:900;}
+.gridHint{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.32) 0 3px,transparent 4px);background-size:240px 165px;background-position:102px 92px;opacity:0;transition:opacity .16s;z-index:1;}
+#hiveList.gridOn .gridHint{opacity:.55;}
 
 /* ---------- title screen ---------- */
 #title{
@@ -781,7 +811,6 @@ td,th{padding:7px 4px;border-bottom:2px solid #F0E7D2;text-align:left;font-weigh
   <div class="statchips bankPanel">
     <div class="chip" data-label="Bucks"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_coin"/></svg><span id="uiCoins">0</span></div>
     <div class="chip" data-label="Honey"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_jar"/></svg><span id="uiHoney">0</span></div>
-    <div class="chip" data-label="Jelly"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_jelly"/></svg><span id="uiJelly">0</span></div>
     <div class="chip" data-label="SAB"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_sab"/></svg><span id="uiSAB">0</span></div>
   </div>
   <div class="hdrMiniGames" id="hdrMiniGames"></div>
@@ -802,16 +831,11 @@ td,th{padding:7px 4px;border-bottom:2px solid #F0E7D2;text-align:left;font-weigh
       </div>
       <div class="small" id="streakLine"></div>
     </div>
-    <div id="hiveList"></div>
+    <div id="hiveList"><div class="gridHint"></div></div>
     <div class="panel" id="dailyPanel">
       <h2>Daily Games</h2>
       <p class="small">3 fresh games daily</p>
       <div class="dgrow" id="dgRow"></div>
-    </div>
-    <div class="panel" id="prestigePanel">
-      <h2><svg class="ic" width="22" height="22" viewBox="0 0 100 100"><use href="#a_jelly"/></svg> Royal Jelly</h2>
-      <p class="small">Retire your apiary to earn Royal Jelly — permanent +10% honey each, forever. You keep every card.</p>
-      <button class="btn purple" id="btnPrestige">Retire Apiary</button>
     </div>
   </section>
 
@@ -903,11 +927,24 @@ td,th{padding:7px 4px;border-bottom:2px solid #F0E7D2;text-align:left;font-weigh
 <div id="actionDock" class="hidden"><button id="bigHarvest"><svg class="ic" width="24" height="24" viewBox="0 0 100 100"><use href="#a_jar"/></svg> HARVEST ALL</button></div>
 
 <nav class="hidden" id="navEl">
+  <div id="dockProgress"><div class="dockFill" id="dockGoalFill"></div><span class="dockText" id="dockGoalText">0/0</span></div>
   <button data-s="apiary" class="on"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_hive"/></svg>Apiary</button>
   <button data-s="cards"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button>
-  <button data-s="shop"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_shop"/></svg>Shop</button>
+  <span class="dockGap"></span>
   <button data-s="book"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button>
+  <button id="dockMenuBtn" type="button"><svg class="hamb" viewBox="0 0 100 100"><path d="M20 30h60M20 50h60M20 70h60" stroke="#2A1A06" stroke-width="10" stroke-linecap="round"/></svg>Menu</button>
 </nav>
+<div class="menuOverlay" id="beeMenuOverlay"><div class="beeMenu">
+  <div class="profile"><div class="avatar" id="menuAvatar"></div><div class="name" id="menuName">My Apiary</div></div>
+  <button class="menuRow" data-go="market"><svg viewBox="0 0 100 100"><use href="#n_shop"/></svg><span>Market</span></button>
+  <button class="menuRow" data-toolbelt="1"><svg viewBox="0 0 100 100"><use href="#a_g_tool"/></svg><span>Toolbelt</span></button>
+  <button class="menuRow" data-map="1"><svg viewBox="0 0 100 100"><use href="#a_f_wild"/></svg><span>Map</span></button>
+  <button class="menuRow" data-go="shop"><svg viewBox="0 0 100 100"><use href="#a_pack"/></svg><span>Shop</span></button>
+  <button class="menuRow" data-go="cards"><svg viewBox="0 0 100 100"><use href="#n_cards"/></svg><span>Cards</span></button>
+  <button class="menuRow" data-go="book"><svg viewBox="0 0 100 100"><use href="#n_book"/></svg><span>Book</span></button>
+  <button class="menuRow" data-settings="1"><svg viewBox="0 0 100 100"><path d="M50 20l6 12 14-2 4 14-12 7 7 12-12 10-10-9-10 9-12-10 7-12-12-7 4-14 14 2z" fill="#C9D2E3" stroke="#2A1A06" stroke-width="5"/><circle cx="50" cy="50" r="11" fill="#fff" stroke="#2A1A06" stroke-width="5"/></svg><span>Settings</span></button>
+  <button class="menuClose" id="beeMenuClose">X</button>
+</div></div>
 
 <div id="coach"><span id="coachBee" style="flex-shrink:0"></span><div class="txt" id="coachTxt"></div></div>
 <div id="achv">
@@ -1090,27 +1127,26 @@ const ALBUM={
  name:"Honey Book · Vol. 1",sub:"Founders' Field",
  sets:[
   {id:"set_court", n:"The Royal Court",  cards:["q_coffee","q_cool","q_stache","q_disco","q_sleepy","q_love"], rw:{coins:500}},
-  {id:"set_crown", n:"Crown Jewels",     cards:["q_money","q_zombee","q_star","q_angel","q_cowboy"],           rw:{coins:1500,jelly:1}},
+  {id:"set_crown", n:"Crown Jewels",     cards:["q_money","q_zombee","q_star","q_angel","q_cowboy"],           rw:{coins:2000}},
   {id:"set_work",  n:"The Workforce",    cards:["w_forager","w_nurse","w_drone","w_guard","w_scout","w_under","w_builder"], rw:{coins:700}},
   {id:"set_bloom", n:"Bloom & Blossom",  cards:["f_wild","f_clover","f_orange","f_buck","f_poplar"],           rw:{coins:600}},
-  {id:"set_texas", n:"Texas Treasures",  cards:["f_mesquite","f_bluebonnet"],                                  rw:{coins:1000,jelly:1}},
+  {id:"set_texas", n:"Texas Treasures",  cards:["f_mesquite","f_bluebonnet"],                                  rw:{coins:1500}},
   {id:"set_kit",   n:"Keeper's Kit",     cards:["g_smoker","g_tool","g_brush","g_excl","g_pollen"],            rw:{coins:600}},
-  {id:"set_pro",   n:"Pro Gear",         cards:["g_screen","g_suit","g_gold"],                                 rw:{coins:1200,jelly:1}},
-  {id:"set_secret",n:"Secret Society",   cards:["s_robee","s_grumble","s_kingbee","s_slugger"],                rw:{coins:3000,jelly:3}},
+  {id:"set_pro",   n:"Pro Gear",         cards:["g_screen","g_suit","g_gold"],                                 rw:{coins:1800}},
+  {id:"set_secret",n:"Secret Society",   cards:["s_robee","s_grumble","s_kingbee","s_slugger"],                rw:{coins:6000}},
  ],
- grand:{coins:10000,jelly:10}
+ grand:{coins:25000}
 };
 const STARS={common:1,uncommon:2,rare:3,epic:4,legendary:5,secret:5};
 function starRow(r){const n=STARS[r]||1;let h='<div class="stars">';for(let i=0;i<5;i++)h+=`<span class="${i<n?'':'dim'}">★</span>`;return h+'</div>';}
 function setOwned(set){return set.cards.filter(k=>S.col[k]>0).length;}
-function rwHTML(rw){let h="";if(rw.coins)h+=`<span class="chip">${I("a_coin",16)} ${fmt(rw.coins)}</span>`;if(rw.jelly)h+=`<span class="chip">${I("a_jelly",16)} ${rw.jelly}</span>`;return h;}
+function rwHTML(rw){let h="";if(rw.coins)h+=`<span class="chip">${I("a_coin",16)} ${fmt(rw.coins)}</span>`;return h;}
 function claimSet(setId){
  const set=ALBUM.sets.find(x=>x.id===setId);if(!set)return;
  if(S.albumClaims[setId])return;
  if(setOwned(set)<set.cards.length){toast("Collect every card in the set first!");return;}
  S.albumClaims[setId]=true;
  if(set.rw.coins)S.coins+=set.rw.coins;
- if(set.rw.jelly)S.jelly=(S.jelly||0)+set.rw.jelly;
  fanfare();confetti(30);mojiCheer("win",2200);
  toast(`SET COMPLETE! ${set.n} rewards claimed!`);
  checkAch();render();queueSave();
@@ -1118,7 +1154,7 @@ function claimSet(setId){
 function claimGrand(){
  if(S.albumGrand)return;
  if(!ALBUM.sets.every(x=>S.albumClaims[x.id])){toast("Claim every set first, keeper!");return;}
- S.albumGrand=true;S.coins+=ALBUM.grand.coins;S.jelly=(S.jelly||0)+ALBUM.grand.jelly;
+ S.albumGrand=true;S.coins+=ALBUM.grand.coins;
  fanfare();confetti(60);
  modal(`<div style="text-align:center" class="mojipop">${mojiImg("win",160)}</div>
   <h2 style="text-align:center">HONEY BOOK COMPLETE!</h2>
@@ -1302,7 +1338,6 @@ const ACHS=[
  {id:"venue_5",n:"Shelf Royalty",d:"Land the grocery store buyers",ic:"a_g_gold",c:2500,s:100,t:()=>(S.venue||0)>=5},
  {id:"all_craft",n:"Master Craftsbee",d:"Discover all 3 crafted cards",ic:"a_g_gold",c:600,s:40,t:()=>(S.crafted||[]).length>=3},
  {id:"duel_1",n:"Duel Winner",d:"Win a Hive Duel",ic:"a_w_guard",c:200,s:15,t:()=>S.duelWins>=1},
- {id:"jelly_1",n:"Royal Retirement",d:"Earn your first Royal Jelly",ic:"a_jelly",c:0,s:50,t:()=>S.jelly>=1},
  {id:"secret_1",n:"Foil Hunter",d:"Unlock a secret physical-pack card",ic:"a_s_robee",c:300,s:20,t:()=>SECRETS.some(x=>S.col[x.id]>0)},
  {id:"texas_1",n:"Texas Pride",d:"Collect a Texas varietal flora card",ic:"a_f_bluebonnet",c:200,s:15,t:()=>S.col.f_mesquite>0||S.col.f_bluebonnet>0},
  {id:"full_house",n:"Full Hive",d:"A hive with Queen, 3 bees & flora — and a full toolbelt",ic:"a_q_angel",c:750,s:40,t:()=>(S.toolbelt||[]).length>=3&&S.hives.some(h=>h.queen&&h.workers.length>=3&&h.flora)},
@@ -1389,7 +1424,6 @@ function hiveRate(h){
  r*=hiveFx(h,"prod",1)*gearMult(h,"prod");
  if(flora&&flora.tex)r*=hiveFx(h,"texas",1);
  r*=(0.5+0.5*(h.mood/100));
- r*=(1+S.jelly*0.10);
  const _roles=distinctRoles(h);
  r*=(1+0.08*_roles+(_roles===5?0.2:0));
  r*=crewBonus(h,"prod",1);
@@ -1612,12 +1646,29 @@ function gotoScreen(s){
  blip(700,.05);render();
 }
 
+
+function snapHivePos(x,y){
+ const xs=[22,50,78],ys=[28,52,76];
+ const near=(arr,v)=>arr.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a,arr[0]);
+ return {x:near(xs,Math.max(12,Math.min(88,x))),y:near(ys,Math.max(18,Math.min(84,y)))};
+}
+function wireBeeMenu(){
+ const btn=document.getElementById("dockMenuBtn"),ov=document.getElementById("beeMenuOverlay"),cl=document.getElementById("beeMenuClose");
+ if(!ov||ov._wired)return;if(btn)btn.onclick=openBeeMenu;cl.onclick=closeBeeMenu;ov.onclick=e=>{if(e.target===ov)closeBeeMenu();};
+ ov.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const s=b.dataset.go;closeBeeMenu();gotoScreen(s);});
+ ov.querySelectorAll("[data-toolbelt]").forEach(b=>b.onclick=()=>{closeBeeMenu();openToolbelt();});
+ ov.querySelectorAll("[data-map]").forEach(b=>b.onclick=()=>{toast("Map fields coming soon — more apiaries will live here.");closeBeeMenu();});
+ ov.querySelectorAll("[data-settings]").forEach(b=>b.onclick=()=>{closeBeeMenu();modal(`<h2>Settings</h2><p class="small" style="font-weight:800">Audio and keeper options will live here.</p><div class="row"><button class="btn" onclick="closeModal()">Done</button></div>`);});
+ ov._wired=true;
+}
+function openBeeMenu(){wireBeeMenu();const ov=document.getElementById("beeMenuOverlay");if(!ov)return;document.getElementById("menuName").textContent=S.apiary||"My Apiary";const av=document.getElementById("menuAvatar");if(av)av.innerHTML=mojiImg?mojiImg(keeperPose(),72):I("n_hive",54);ov.classList.add("on");blip(700,.05);}
+function closeBeeMenu(){document.getElementById("beeMenuOverlay")?.classList.remove("on");}
+
 /* ---------- render ---------- */
 function renderHeader(){
  document.getElementById("apiaryName").textContent=S.apiary;
  document.getElementById("uiCoins").textContent=fmt(S.coins);
  document.getElementById("uiHoney").textContent=fmt(Object.values(S.honey).reduce((a,b)=>a+b,0));
- document.getElementById("uiJelly").textContent=S.jelly;
  document.getElementById("uiSAB").textContent=fmt(S.sab);
  const g=goalsFor(S.level),earn=Math.min(S.lvEarn||0,g.earn),jars=Math.min(S.lvJars||0,g.jars);
  const setRing=(id,v,m)=>{const r=document.getElementById(id);if(r)r.style.strokeDashoffset=132-(132*Math.min(1,m? v/m:0));};
@@ -1625,6 +1676,7 @@ function renderHeader(){
  const eg=document.getElementById("uiEarnGoal"),jg=document.getElementById("uiJarGoal");
  if(eg)eg.textContent=`${fmt(earn)}/${fmt(g.earn)}`;
  if(jg)jg.textContent=`${fmt(jars)}/${fmt(g.jars)}`;
+ const dg=document.getElementById("dockGoalFill"),dt=document.getElementById("dockGoalText");if(dg)dg.style.width=(Math.min(1,jars/g.jars)*100)+"%";if(dt)dt.textContent=`${fmt(jars)}/${fmt(g.jars)} jars`;
  document.getElementById("sabBig").textContent=fmt(S.sab);
  document.getElementById("streakLine").innerHTML=`<b>Day ${S.streak}</b> streak`;
  document.getElementById("pidLine").textContent="Keeper ID: "+S.pid+" · Auto-saves as you play.";
@@ -1632,16 +1684,16 @@ function renderHeader(){
  if(mb){mb.style.opacity=S.muted?.4:1;
   mb.onclick=()=>{S.muted=!S.muted;if(S.muted)Music.stop();else Music.start();mb.style.opacity=S.muted?.4:1;blip(S.muted?300:700,.06);queueSave();};}
  // nav locks
- document.querySelectorAll("nav button").forEach(b=>{
+ document.querySelectorAll("nav button[data-s]").forEach(b=>{
   const locked=S.tut<TUT_DONE&&b.dataset.s!=="apiary"&&!(S.tut===6&&b.dataset.s==="market");
   b.classList.toggle("lock",locked);
  });
  const curScr=(document.querySelector(".screen.on")?.id||"scr-apiary").replace("scr-","");
  document.getElementById("actionDock").classList.toggle("hidden",S.tut<TUT_DONE||curScr!=="apiary");
  document.getElementById("bigHarvest")?.classList.toggle("ready",S.hives.some(h=>h.stored>=20&&now()>=(h.harvCd||0)));
- document.getElementById("prestigePanel").style.display=S.tut>=TUT_DONE?"":"none";
  document.getElementById("btnBuyHive").style.display=S.tut>=TUT_DONE?"":"none";
- const ms=document.getElementById("marketStandBtn");if(ms)ms.onclick=()=>gotoScreen("market");
+ const ms=document.getElementById("marketStandBtn");if(ms)ms.onclick=()=>openBeeMenu();
+ wireBeeMenu();
 }
 function wireHiveDrag(el){
  el.querySelectorAll(".hive").forEach(card=>{
@@ -1652,7 +1704,7 @@ function wireHiveDrag(el){
    if(S.placingHive!=null||e.target.closest("button,[data-act],[data-mg],[data-use],[data-belt]"))return;
    idx=+card.dataset.i;startX=e.clientX;startY=e.clientY;moved=false;drag=false;
    hold=setTimeout(()=>{
-    drag=true;card.classList.add("dragging");card.setPointerCapture?.(e.pointerId);
+    drag=true;card.classList.add("dragging");document.getElementById("hiveList")?.classList.add("gridOn");card.setPointerCapture?.(e.pointerId);
     if(navigator.vibrate)try{navigator.vibrate(18);}catch(_){ }
     toast("Drag hive to a new spot");
    },430);
@@ -1663,16 +1715,17 @@ function wireHiveDrag(el){
    if(!drag){if(moved)clear();return;}
    e.preventDefault();
    const list=document.getElementById("hiveList"),r=list.getBoundingClientRect();
-   const x=Math.max(8,Math.min(92,(e.clientX-r.left)/r.width*100));
-   const y=Math.max(12,Math.min(88,(e.clientY-r.top)/r.height*100));
+   let x=Math.max(8,Math.min(92,(e.clientX-r.left)/r.width*100));
+   let y=Math.max(12,Math.min(88,(e.clientY-r.top)/r.height*100));
+   const sp=snapHivePos(x,y);x=sp.x;y=sp.y;
    const h=S.hives[idx];if(!h)return;
    h.x=x;h.y=y;card.style.setProperty("--hx",x+"%");card.style.setProperty("--hy",y+"%");
   });
   const finish=e=>{
    clear();
    if(drag){
-    e.preventDefault();card.classList.remove("dragging");card.releasePointerCapture?.(e.pointerId);
-    card._draggedUntil=Date.now()+650;toast("Hive moved");queueSave();
+    e.preventDefault();card.classList.remove("dragging");document.getElementById("hiveList")?.classList.remove("gridOn");card.releasePointerCapture?.(e.pointerId);
+    card._draggedUntil=Date.now()+650;toast("Hive snapped into place");queueSave();
    }
    drag=false;moved=false;
   };
@@ -1699,8 +1752,8 @@ function renderHives(){
   const div=document.createElement("div");
   div.className="hive "+(q?q.cls:"");
   div.dataset.i=i;
-  const posX=h.x!=null?h.x:([30,70,50,30,70,20,82][i%7]);
-  const posY=h.y!=null?h.y:([28,31,52,69,72,50,54][i%7]);
+  const posX=h.x!=null?h.x:([22,50,78,22,50,78,22,50,78][i%9]);
+  const posY=h.y!=null?h.y:([28,28,28,52,52,52,76,76,76][i%9]);
   div.style.setProperty("--hx",posX+"%");
   div.style.setProperty("--hy",posY+"%");
   if(S.placingHive===i)div.classList.add("placing");
@@ -2117,16 +2170,7 @@ document.getElementById("bigHarvest").onclick=()=>{
  if(total<1){toast(cooling?"All hives are still bottling — give the bees a minute!":"Nothing to harvest yet!");return;}
  S.sab+=1;S.harvested+=total;S.lvJars=(S.lvJars||0)+total;blip(700,.06);blip(900,.08);confetti(12);toast(`Harvested ${fmt(total)} jars across the apiary!`);maybeFact();checkAch();render();queueSave();
 };
-document.getElementById("btnPrestige").onclick=()=>{
- const gain=Math.floor(Math.sqrt(S.totalEarned/10000));
- if(gain<1){modal(`<h2>Not yet, keeper</h2><p>Earn 10,000 lifetime Bee Bucks to retire. Lifetime so far: <b>${fmt(S.totalEarned)}</b>.</p><div style="text-align:center"><button class="btn" onclick="closeModal()">Back to the bees</button></div>`);return;}
- modal(`<h2>Retire for ${gain} Royal Jelly?</h2><p style="font-weight:800">Hives, coins and honey reset. You KEEP every card and all Save-a-Bee points. Each Jelly = permanent +10% production.</p>
-  <div class="row"><button class="btn purple" id="doPrest">Retire (+${gain})</button><button class="btn ghost" onclick="closeModal()">Cancel</button></div>`);
- document.getElementById("doPrest").onclick=()=>{
-  S.jelly+=gain;S.coins=500;S.honey={};S.totalEarned=0;S.hives=[newHive()];
-  checkAch();burst("a_jelly");confetti(40);fanfare();toast(`Retired with honor! +${gain} Royal Jelly`);closeModal();render();queueSave();
- };
-};
+/* retirement removed */
 
 /* ---------- daily + market ---------- */
 function dayKey(){return new Date().toDateString();}
@@ -2456,8 +2500,9 @@ setInterval(()=>{ // threat spawner + escalation + collapse + wild swarms
  if(S.placingHive==null)return;
  const idx=S.placingHive;
  const r=list.getBoundingClientRect();
- const x=Math.max(14,Math.min(86,(e.clientX-r.left)/r.width*100));
- const y=Math.max(12,Math.min(86,(e.clientY-r.top)/r.height*100));
+ let x=Math.max(14,Math.min(86,(e.clientX-r.left)/r.width*100));
+ let y=Math.max(12,Math.min(86,(e.clientY-r.top)/r.height*100));
+ const sp=snapHivePos(x,y);x=sp.x;y=sp.y;
  const h=S.hives[idx];h.x=x;h.y=y;delete h.pendingPlace;S.placingHive=null;
  toast("Hive placed!");blip(760,.07);render();queueSave();
  });
@@ -2528,7 +2573,7 @@ function playRewardedAd(onReward,onFallback){
 }
 function adOffer(){
  const roll=Math.random();
- const reward=roll<0.12?{t:"jelly",amt:1,label:"1 Royal Jelly"}:{t:"coins",amt:100+Math.floor(Math.random()*101),label:""};
+ const reward={t:"coins",amt:100+Math.floor(Math.random()*151),label:""};
  if(reward.t==="coins")reward.label=reward.amt+" Bee Bucks";
  modal(`<div style="text-align:center">${beeSprite({body:"yellow",face:"star_eyes",acc:"headphones"},90)}</div>
   <h2 style="text-align:center">Courier Bee!</h2>
@@ -2536,7 +2581,7 @@ function adOffer(){
   <p class="small" style="text-align:center">${adsLeft()} gift${adsLeft()===1?"":"s"} left today</p>
   <div class="row" style="justify-content:center;margin-top:10px"><button class="btn green pulse" id="adGo">WATCH</button><button class="btn ghost" onclick="closeModal()">No thanks</button></div>`);
  const grant=()=>{S.adWatch.count++;
-  if(reward.t==="coins")S.coins+=reward.amt;else S.jelly+=reward.amt;
+  S.coins+=reward.amt;
   confetti(20);fanfare();toast(`Courier delivered: +${reward.label}!`);
   renderHeader();queueSave();};
  const simPlay=()=>{
