@@ -76,7 +76,7 @@ header{
 header.gamehud{position:fixed;left:50%;transform:translateX(-50%);top:0;width:100%;max-width:520px;min-height:142px;align-items:flex-start;padding:8px 10px 6px;pointer-events:none;}
 header.gamehud::before{content:"";position:fixed;left:50%;top:0;transform:translateX(-50%);width:100%;max-width:520px;height:150px;z-index:0;pointer-events:none;background:radial-gradient(circle at 18% 54%,rgba(255,180,43,.94) 0 18px,transparent 19px),radial-gradient(circle at 44% 42%,rgba(255,194,55,.94) 0 24px,transparent 25px),linear-gradient(180deg,#FFF8E5 0%,#FFE08A 42%,rgba(255,224,138,0) 100%);clip-path:path('M0 0 H520 V80 C494 89 491 123 472 123 C452 123 454 90 430 82 C397 70 381 113 356 105 C334 98 342 65 314 70 C282 76 285 128 257 128 C226 128 238 85 206 74 C174 63 158 108 132 102 C107 96 113 62 88 70 C59 79 62 126 36 126 C12 126 17 88 0 80 Z');}
 header.gamehud>*{pointer-events:auto;position:relative;z-index:2;}
-header.gamehud .goalStack,header.gamehud .statchips,header.gamehud #muteBtn,header.gamehud #hdrMiniGames{position:absolute;}
+header.gamehud .goalStack,header.gamehud .statchips,header.gamehud #muteBtn,header.gamehud #topMenuBtn,header.gamehud #hdrMiniGames{position:absolute;}
 header.gamehud .hudIcon{width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff,#FFD23E 58%,#E08700 100%);border:4px solid #2A1A06;box-shadow:0 5px 0 rgba(42,26,6,.45),0 8px 13px rgba(0,0,0,.20);display:flex;align-items:center;justify-content:center;}
 header.gamehud .hudLabel{position:absolute;left:50%;bottom:-15px;transform:translateX(-50%);background:#fff;color:#2A1A06;border:2px solid #2A1A06;border-radius:999px;padding:0 7px;font-size:10px;font-weight:900;line-height:16px;white-space:nowrap;box-shadow:0 2px 0 rgba(0,0,0,.18);}
 .bankPanel{position:absolute;left:8px;top:74px;width:116px;border:3px solid #2A1A06;border-radius:18px;background:linear-gradient(180deg,#FFFDF6,#F8E7BE);box-shadow:0 5px 0 rgba(42,26,6,.25),0 9px 14px rgba(0,0,0,.14);padding:12px 5px 5px;display:grid!important;grid-template-columns:1fr 1fr;gap:4px;align-items:center;}
@@ -149,8 +149,10 @@ header.gamehud .hudLabel{position:absolute;left:50%;bottom:-15px;transform:trans
 #marketStandBtn::after{content:'Market';font-size:10px;font-weight:900;color:#2A1A06;background:#fff;border:2px solid #2A1A06;border-radius:999px;padding:0 7px;margin-top:-6px;line-height:16px;box-shadow:0 2px 0 rgba(0,0,0,.18);}
 .statchips.bankPanel{position:absolute;left:8px;top:82px;right:auto;z-index:4;}
 .statchips .chip{min-width:54px;justify-content:flex-start;font-size:12px;padding:3px 8px 3px 4px;}
-#muteBtn.chip{position:absolute;left:calc(50% + 148px);top:0;z-index:5;width:58px;height:58px;min-width:0;padding:0;border:4px solid #2A1A06;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 28%,#fff,#FFD23E 58%,#E08700 100%);box-shadow:0 5px 0 rgba(42,26,6,.45),0 8px 13px rgba(0,0,0,.20);justify-content:center;}
-@media(max-width:390px){#hdrLogo{height:68px}.goalStack{left:7px;width:112px}.goalrings{gap:5px}.goalring{width:54px}.statchips.bankPanel{left:7px;top:82px;width:108px}.bankPanel .chip{font-size:11px}.hdrMiniGames{right:8px;top:102px}#marketStandBtn{left:calc(50% + 68px);width:54px}#marketStandBtn svg{width:54px;height:54px}#muteBtn.chip{left:calc(50% + 126px);width:54px;height:54px}}
+#muteBtn.chip{position:absolute;right:74px;left:auto;top:8px;z-index:5;width:54px;height:54px;min-width:0;padding:0;border:4px solid #2A1A06;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 28%,#fff,#FFD23E 58%,#E08700 100%);box-shadow:0 5px 0 rgba(42,26,6,.45),0 8px 13px rgba(0,0,0,.20);justify-content:center;}
+#topMenuBtn{right:10px;top:8px;z-index:5;width:54px;height:54px;border:4px solid #2A1A06;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff,#FFD23E 58%,#E08700 100%);box-shadow:0 5px 0 rgba(42,26,6,.45),0 8px 13px rgba(0,0,0,.20);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;}
+#topMenuBtn svg{width:30px;height:30px;}
+@media(max-width:390px){#hdrLogo{height:68px}.goalStack{left:7px;width:112px}.goalrings{gap:5px}.goalring{width:54px}.statchips.bankPanel{left:7px;top:82px;width:108px}.bankPanel .chip{font-size:11px}.hdrMiniGames{right:8px;top:102px}#marketStandBtn{left:calc(50% + 68px);width:54px}#marketStandBtn svg{width:54px;height:54px}#muteBtn.chip{right:68px;width:52px;height:52px}#topMenuBtn{right:8px;width:52px;height:52px}}
 
 main{flex:1;position:relative;z-index:1;overflow-y:auto;padding:126px 12px 150px;}
 .screen{display:none;animation:in .22s ease-out;}
@@ -173,7 +175,7 @@ main{flex:1;position:relative;z-index:1;overflow-y:auto;padding:126px 12px 150px
 #swarmAlert .row{display:block!important;text-align:center;}
 #swarmAlert b{display:block;font-size:12px;line-height:1.05;margin-bottom:5px;}
 #swarmAlert .btn{font-size:12px!important;padding:6px 8px!important;border-radius:14px!important;}
-#hiveToolbar{position:fixed;left:50%;bottom:116px;transform:translateX(-50%);z-index:35;margin:0!important;padding:0!important;background:transparent!important;box-shadow:none!important;}
+#hiveToolbar{position:fixed;left:50%;bottom:118px;transform:translateX(70px);right:auto;z-index:35;margin:0!important;padding:0!important;background:transparent!important;box-shadow:none!important;}
 #hiveToolbar .panelhead{margin:0;}
 #hiveToolbar h2,#streakLine{display:none;}
 #btnBuyHive{font-size:15px!important;border-radius:24px;padding:10px 20px!important;background:linear-gradient(180deg,#8BE883,#2FB544)!important;box-shadow:0 5px 0 #2F8B2F,0 0 0 4px rgba(255,255,255,.55),0 0 14px rgba(124,185,91,.75)!important;}
@@ -371,7 +373,7 @@ nav button.on::after{display:none;}
 nav button .nv{width:28px!important;height:28px!important;margin:0;}
 nav button.on .nv{transform:none;filter:none;}
 nav .dockGap{flex:0 0 92px;pointer-events:none;}
-#dockProgress{position:absolute;left:12px;right:12px;top:-24px;height:26px;background:#2D6CCB;border:4px solid #2A1A06;border-radius:999px;box-shadow:0 4px 0 rgba(42,26,6,.22);overflow:hidden;display:flex;align-items:center;justify-content:center;z-index:-2;}
+#dockProgress{position:absolute;left:50%;transform:translateX(-50%);width:218px;top:-30px;height:24px;background:#2D6CCB;border:4px solid #2A1A06;border-radius:999px;box-shadow:0 4px 0 rgba(42,26,6,.22);overflow:hidden;display:flex;align-items:center;justify-content:center;z-index:2;}
 #dockProgress .dockFill{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,#55B7FF,#8EE5FF);border-radius:999px;transition:width .25s ease;}
 #dockProgress .dockText{position:relative;z-index:1;color:#fff;font-size:11px;font-weight:1000;text-shadow:0 2px 0 rgba(0,0,0,.35);}
 #actionDock{bottom:calc(30px + env(safe-area-inset-bottom));z-index:75;}
@@ -808,6 +810,7 @@ td,th{padding:7px 4px;border-bottom:2px solid #F0E7D2;text-align:left;font-weigh
     <button id="marketStandBtn" title="Market"><svg width="42" height="42" viewBox="0 0 100 100" aria-hidden="true"><path d="M17 36h66l-7-16H24z" fill="#F7E3B0" stroke="#2A1A06" stroke-width="5" stroke-linejoin="round"/><path d="M22 20h12l-5 16H17z" fill="#E6392E"/><path d="M34 20h13l-2 16H29z" fill="#FFF7DD"/><path d="M47 20h13l2 16H45z" fill="#E6392E"/><path d="M60 20h16l7 16H62z" fill="#FFF7DD"/><path d="M22 36q5 9 12 0q6 9 13 0q6 9 13 0q6 9 13 0q5 8 10 0" fill="#FFE7A0" stroke="#2A1A06" stroke-width="4" stroke-linecap="round"/><path d="M25 42h50v34H25z" fill="#A8713A" stroke="#2A1A06" stroke-width="5"/><path d="M20 70h60v12H20z" fill="#E3A449" stroke="#2A1A06" stroke-width="5"/><circle cx="41" cy="58" r="8" fill="#FFD23E" stroke="#2A1A06" stroke-width="4"/><path d="M55 51h14v14H55z" fill="#FFF8EA" stroke="#2A1A06" stroke-width="4"/></svg></button>
   </div>
   <button class="chip" id="muteBtn"><svg class="ic" width="15" height="15" viewBox="0 0 100 100"><use href="#n_note"/></svg></button>
+  <button id="topMenuBtn" type="button" title="Menu"><svg viewBox="0 0 100 100"><path d="M20 30h60M20 50h60M20 70h60" stroke="#2A1A06" stroke-width="10" stroke-linecap="round"/></svg></button>
   <div class="statchips bankPanel">
     <div class="chip" data-label="Bucks"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_coin"/></svg><span id="uiCoins">0</span></div>
     <div class="chip" data-label="Honey"><svg class="ic" width="20" height="20" viewBox="0 0 100 100"><use href="#a_jar"/></svg><span id="uiHoney">0</span></div>
@@ -932,7 +935,7 @@ td,th{padding:7px 4px;border-bottom:2px solid #F0E7D2;text-align:left;font-weigh
   <button data-s="cards"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_cards"/></svg>Cards</button>
   <span class="dockGap"></span>
   <button data-s="book"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_book"/></svg>Book</button>
-  <button id="dockMenuBtn" type="button"><svg class="hamb" viewBox="0 0 100 100"><path d="M20 30h60M20 50h60M20 70h60" stroke="#2A1A06" stroke-width="10" stroke-linecap="round"/></svg>Menu</button>
+  <button data-s="market"><svg class="nv" width="26" height="26" viewBox="0 0 100 100"><use href="#n_shop"/></svg>Market</button>
 </nav>
 <div class="menuOverlay" id="beeMenuOverlay"><div class="beeMenu">
   <div class="profile"><div class="avatar" id="menuAvatar"></div><div class="name" id="menuName">My Apiary</div></div>
@@ -1653,7 +1656,7 @@ function snapHivePos(x,y){
  return {x:near(xs,Math.max(12,Math.min(88,x))),y:near(ys,Math.max(18,Math.min(84,y)))};
 }
 function wireBeeMenu(){
- const btn=document.getElementById("dockMenuBtn"),ov=document.getElementById("beeMenuOverlay"),cl=document.getElementById("beeMenuClose");
+ const btn=document.getElementById("topMenuBtn"),ov=document.getElementById("beeMenuOverlay"),cl=document.getElementById("beeMenuClose");
  if(!ov||ov._wired)return;if(btn)btn.onclick=openBeeMenu;cl.onclick=closeBeeMenu;ov.onclick=e=>{if(e.target===ov)closeBeeMenu();};
  ov.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const s=b.dataset.go;closeBeeMenu();gotoScreen(s);});
  ov.querySelectorAll("[data-toolbelt]").forEach(b=>b.onclick=()=>{closeBeeMenu();openToolbelt();});
